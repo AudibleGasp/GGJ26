@@ -18,6 +18,8 @@ public class FirstPersonLook : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Mouse X: " + Input.GetAxis("Mouse X") + " | Mouse Y: " + Input.GetAxis("Mouse Y"));
+        
         // 1. Get Input
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
