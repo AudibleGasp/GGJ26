@@ -16,9 +16,13 @@ public class CameraFollow : MonoBehaviour
     private Vector3 _posOffset;
     private Vector3 _currentVelocity = Vector3.zero;
     private float _currentPitch = 0f;
+    
+    private PlayerController playerController; // Reference the script, not just Transform
 
     void Start()
     {
+        playerController = Main.Instance.PlayerController;
+        
         // Calculate initial position offset in the TARGET'S local space
         if (target != null)
         {
@@ -40,8 +44,8 @@ public class CameraFollow : MonoBehaviour
 
         // Yaw (Left/Right): We read this directly from the target (Player).
         // Since Player rotates in FixedUpdate (Interpolated), this value is smooth.
-        float targetYaw = target.eulerAngles.y;
-
+        float targetYaw = playerController.CurrentYaw;
+        
         // Apply rotation
         transform.rotation = Quaternion.Euler(_currentPitch, targetYaw, 0);
 

@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     public Projectile projectilePrefab;
 
     // Internal State
-    private float currentYaw = 0f; // Stores the horizontal rotation
+    public float CurrentYaw { get; private set; }
     private Vector2 inputVector;
     private bool jumpRequested;
 
@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     
     // Attack State
     private bool isAttacking;
+    private int slapSide = 1;
     private float nextAttackTime;
     private float attackEndTime;
 
@@ -52,7 +53,7 @@ public class PlayerController : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody>();
         
         // Initialize Yaw to current rotation to prevent snapping on start
-        currentYaw = transform.rotation.eulerAngles.y;
+        CurrentYaw = transform.rotation.eulerAngles.y;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -83,7 +84,7 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
 
         // Apply Rotation here for smooth physics interpolation
-        Quaternion targetRotation = Quaternion.Euler(0, currentYaw, 0);
+        Quaternion targetRotation = Quaternion.Euler(0, CurrentYaw, 0);
         rb.MoveRotation(targetRotation);
 
         if (jumpRequested)
@@ -127,7 +128,8 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange, hitLayer))
             {
                 // Assuming ChaserEnemy exists in your project
-                hit.collider.GetComponent<ChaserEnemy>()?.Slap(rb.position); 
+                hit.collider.GetComponent<ChaserEnemy>()?.Slap(rb.position, slapSide);
+                slapSide *= -1;
             }
             Debug.Log($"<color=yellow>Attack Finished</color>");
         }
@@ -162,7 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         // We only calculate the value here. We apply it in FixedUpdate.
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        currentYaw += mouseX;
+        CurrentYaw += mouseX;
     }
 
     private void HandleMovement()

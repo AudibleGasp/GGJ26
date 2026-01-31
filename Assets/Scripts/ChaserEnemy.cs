@@ -113,7 +113,7 @@ public class ChaserEnemy : MonoBehaviour
         }
 
         // --- LUNGE ---
-        rb.linearVelocity = attackDir * lungeSpeed + Vector3.up * 3;
+        rb.linearVelocity = attackDir * lungeSpeed + Vector3.up * 5;
         yield return new WaitForSeconds(lungeDuration);
 
         // 2. STATE: RECOVERY -> KIRMIZI YAP
@@ -151,7 +151,7 @@ public class ChaserEnemy : MonoBehaviour
         }
     }
 
-    public void Slap(Vector3 sourcePos)
+    public void Slap(Vector3 sourcePos, int direction = 1)
     {
         if (mask == MaskType.None)
         {
@@ -159,7 +159,7 @@ public class ChaserEnemy : MonoBehaviour
             return;
         }
         
-        DestroyMask();
+        DestroyMask(direction);
     }
 
     public void TakeDamage(float amount)
@@ -172,12 +172,12 @@ public class ChaserEnemy : MonoBehaviour
         health -= amount;
         if (health <= 0)
         {
-            DestroyMask();
+            DestroyMask(0);
             Destroy(gameObject);
         }
     }
     
-    public void DestroyMask()
+    public void DestroyMask(int direction = 1)
     {
         if (mask == MaskType.None)
         {
@@ -186,7 +186,7 @@ public class ChaserEnemy : MonoBehaviour
         
         mask = MaskType.None;
         Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
-        spawnedMask.OnSlap(transform.right * 7 + Vector3.up * 5);
+        spawnedMask.OnSlap(transform.right * (7 * direction) + Vector3.up * 6);
         maskTransform.gameObject.SetActive(false);
     }
 
