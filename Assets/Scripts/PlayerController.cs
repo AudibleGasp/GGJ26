@@ -231,6 +231,7 @@ public class PlayerController : MonoBehaviour
             currentLives--;
             
             // anim.SetTrigger("Hit"); 
+            // if current lives less than 0 load the try again scene
         }
     }
 
