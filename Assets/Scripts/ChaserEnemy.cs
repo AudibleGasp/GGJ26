@@ -4,21 +4,35 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class ChaserEnemy : MonoBehaviour
 {
-    public enum EnemyState { Chasing, Attacking, Recovering }
+    private static readonly int Attack = Animator.StringToHash("Attack");
+
+    public enum EnemyState
+    {
+        Chasing, Attacking, Recovering
+    }
 
     [Header("Stats")]
     [SerializeField] private float health = 30f;
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float turnSpeed = 10f;
+    [SerializeField] private MaskType mask;
 
     [Header("Attack (Lunge) Settings")]
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float windUpTime = 1f;
     [SerializeField] private float windUpSpeed = 3f;
-    [SerializeField] private float lungeDuration = 0.6f;
-    [SerializeField] private float lungeSpeed = 12f;
+    [SerializeField] private float lungeDuration = 0.3f;
+    [SerializeField] private float lungeSpeed = 10f;
     [SerializeField] private float recoveryTime = 1f;
     [SerializeField] private float damage = 15f;
+    
+    [Header("Animations")]
+    [SerializeField] 
+    private Animator anim;
+    [SerializeField] 
+    private Mask maskPrefab;
+    [SerializeField] 
+    private Transform maskTransform;
 
     private Transform target;
     private Rigidbody rb;
@@ -69,7 +83,7 @@ public class ChaserEnemy : MonoBehaviour
             if (direction != Vector3.zero)
             {
                 Quaternion lookRot = Quaternion.LookRotation(direction);
-                rb.rotation = Quaternion.Slerp(rb.rotation, lookRot, Time.fixedDeltaTime * turnSpeed);
+                rb.MoveRotation(Quaternion.Slerp(rb.rotation, lookRot, Time.fixedDeltaTime * turnSpeed));
             }
 
             Vector3 moveVel = direction * moveSpeed;
@@ -79,6 +93,8 @@ public class ChaserEnemy : MonoBehaviour
 
     private IEnumerator PerformLungeSequence()
     {
+        anim.SetTrigger(Attack);
+        
         // 1. STATE: ATTACKING -> SARI YAP
         currentState = EnemyState.Attacking;
         UpdateColor(Color.yellow);
@@ -97,7 +113,7 @@ public class ChaserEnemy : MonoBehaviour
         }
 
         // --- LUNGE ---
-        rb.linearVelocity = attackDir * lungeSpeed;
+        rb.linearVelocity = attackDir * lungeSpeed + Vector3.up * 3;
         yield return new WaitForSeconds(lungeDuration);
 
         // 2. STATE: RECOVERY -> KIRMIZI YAP
@@ -123,6 +139,11 @@ public class ChaserEnemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // if (collision.gameObject.CompareTag("Enemy"))
+        // {
+        //     rb.linearVelocity -= (collision.transform.position - transform.position).normalized * 2;
+        // }
+        // else
         if (currentState == EnemyState.Attacking && collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Lunge Hit!");
@@ -130,10 +151,27 @@ public class ChaserEnemy : MonoBehaviour
         }
     }
 
+    public void Slap()
+    {
+        if (mask == MaskType.None)
+            return;
+        
+        DestroyMask();
+    }
+
     public void TakeDamage(float amount)
     {
         health -= amount;
-        if (health <= 0) Destroy(gameObject);
+        if (health <= 0)
+            Destroy(gameObject);
+    }
+    
+    public void DestroyMask()
+    {
+        mask = MaskType.None;
+        Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
+        spawnedMask.OnSlap(transform.right * 7 + Vector3.up * 5);
+        maskTransform.gameObject.SetActive(false);
     }
 
     private void OnDrawGizmos()
