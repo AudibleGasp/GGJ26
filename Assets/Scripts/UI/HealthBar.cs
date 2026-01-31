@@ -1,49 +1,77 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening; // DOTween Kütüphanesi
 
 public class HealthBar : MonoBehaviour
 {
-    public RectTransform fillRect; // Inspector'dan Fill objesini sürükle
+    [Header("Referanslar")]
+    public RectTransform fillRect; // Yeşil/Kırmızı dolan kısım
+    public PlayerController player; // Canı takip edilecek karakter
 
-    private float maxBarWidth; // Parent'tan otomatik alacak, gizli kalsın
+    [Header("Ayarlar")]
+    public float widthPerLife = 170f; // Her bir canın piksel genişliği (510 / 3 = 170)
+    public float animationDuration = 0.5f; // Barın düşme hızı
 
-    [Header("Test")]
-    [Range(0, 100)]
-    public float currentHealth = 100f;
-    public float maxHealth = 100f;
+    private int lastLivesVal = -1; // Değişikliği algılamak için
+    private float defaultHeight;
 
     void Start()
     {
-        if (fillRect != null && fillRect.parent != null)
+        // Eğer Player atanmadıysa otomatik bul
+        if (player == null)
+            player = FindFirstObjectByType<PlayerController>();
+
+        // Yüksekliği kaydet (bozulmasın diye)
+        defaultHeight = fillRect.sizeDelta.y;
+
+        // Başlangıçta barı full (veya player canına eşit) yap
+        if (player != null)
         {
-            // Parent'ın (Progress Bar arka planı) RectTransform'unu al
-            RectTransform parentRect = fillRect.parent.GetComponent<RectTransform>();
-
-            // 1. Max genişliği parent'ın genişliği olarak ayarla
-            maxBarWidth = parentRect.rect.width;
-
-            // 2. Başlangıçta Fill objesini Parent ile birebir aynı boyuta getir (Full can)
-            // X: Parent genişliği, Y: Parent yüksekliği
-            fillRect.sizeDelta = new Vector2(maxBarWidth, parentRect.rect.height);
-            
-            // Eğer pozisyon kaymışsa merkeze oturt (Opsiyonel ama garantidir)
-            fillRect.anchoredPosition = Vector2.zero;
+            lastLivesVal = player.currentLives;
+            UpdateWidth(player.currentLives, true); // true = Animasyonsuz ilk kurulum
         }
     }
 
     void Update()
     {
-        UpdateVisual();
+        if (player == null) return;
+
+        // Player'ın canı değişti mi? (Polling yöntemi)
+        if (player.currentLives != lastLivesVal)
+        {
+            // Yeni can değerini güncelle
+            UpdateWidth(player.currentLives, false); 
+            lastLivesVal = player.currentLives;
+        }
     }
 
-    void UpdateVisual()
+    void UpdateWidth(int lives, bool instant)
     {
-        if (fillRect == null) return;
+        // Hedef Genişlik Hesabı: (Örn: 2 can * 170 = 340px)
+        float targetWidth = lives * widthPerLife;
 
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        float ratio = currentHealth / maxHealth;
+        if (instant)
+        {
+            // Animasyonsuz direkt ayarla (Start anı için)
+            fillRect.sizeDelta = new Vector2(targetWidth, defaultHeight);
+        }
+        else
+        {
+            // --- DOTween Animasyonu ---
+            // 1. Genişliği yumuşakça düşür
+            fillRect.DOSizeDelta(new Vector2(targetWidth, defaultHeight), animationDuration)
+                .SetEase(Ease.OutBounce); // Hafif sekerek düşsün
 
-        // Genişliği (x) orana göre değiştir, yüksekliği (y) olduğu gibi bırak (Start'ta ayarlandı)
-        fillRect.sizeDelta = new Vector2(maxBarWidth * ratio, fillRect.sizeDelta.y);
+            // 2. Can azaldıysa barı salla (Shake Effect)
+            if (lives < lastLivesVal) // Sadece hasar alınca salla
+            {
+                // Barı kırmızıya boyayıp geri döndür (Flash Effect)
+                fillRect.GetComponent<Image>().DOColor(Color.red, 0.1f)
+                    .SetLoops(2, LoopType.Yoyo);
+
+                // Tüm barı salla
+                transform.DOShakePosition(0.4f, 10f, 20, 90, false, true);
+            }
+        }
     }
 }

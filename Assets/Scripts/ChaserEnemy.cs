@@ -188,8 +188,19 @@ public class ChaserEnemy : EnemyBase
             {
                 PushTarget(collision);
 
-                // Damage
-                collision.gameObject.GetComponent<PlayerController>().OnHit();
+                // --- DEĞİŞİKLİK BURADA ---
+                // Oyuncu scriptine eriş
+                PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+                
+                if (player != null)
+                {
+                    // 1. Can azalt (Bu, HealthBar'ı tetikler)
+                    player.TakeDamage();
+
+                    // 2. Hit efektini/timer'ı çalıştır (Eski kodun)
+                    player.OnHit();
+                }
+                // -------------------------
             }
             
             if (collision.gameObject.CompareTag("Enemy"))

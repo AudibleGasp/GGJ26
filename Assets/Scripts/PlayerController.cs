@@ -39,6 +39,10 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem slapFX;
     public Transform muzzleTransform;
 
+    [Header("Health")]
+    public int maxLives = 3;
+    public int currentLives = 3; // Mevcut can
+
     // Internal State
     public float CurrentYaw { get; private set; }
     private Vector2 inputVector;
@@ -218,6 +222,16 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+    }
+
+    public void TakeDamage()
+    {
+        if (currentLives > 0)
+        {
+            currentLives--;
+            
+            // anim.SetTrigger("Hit"); 
+        }
     }
 
     private void OnDrawGizmos()
