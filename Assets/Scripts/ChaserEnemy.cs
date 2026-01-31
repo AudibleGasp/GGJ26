@@ -36,6 +36,7 @@ public class ChaserEnemy : MonoBehaviour
 
     private Transform target;
     private Rigidbody rb;
+    [SerializeField]
     private Renderer enemyRenderer; // Renk değiştirmek için referans
     private EnemyState currentState = EnemyState.Chasing;
     private bool isDead = false;
@@ -46,8 +47,6 @@ public class ChaserEnemy : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.freezeRotation = true;
 
-        // Materyal rengini değiştirmek için Renderer'ı al
-        enemyRenderer = GetComponent<Renderer>();
         // Başlangıç rengi: Yeşil (Kovalama)
         UpdateColor(Color.green);
 
@@ -102,6 +101,9 @@ public class ChaserEnemy : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         Vector3 attackDir = (target.position - transform.position).normalized;
         attackDir.y = 0;
+        
+        Quaternion lookRot = Quaternion.LookRotation(attackDir);
+        rb.MoveRotation(lookRot);
         
         // --- WIND UP ---
         float timer = 0;

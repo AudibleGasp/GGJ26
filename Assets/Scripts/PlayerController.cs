@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public Animator anim;
     public Projectile projectilePrefab;
+    public ParticleSystem hitFX;
+    public ParticleSystem slapFX;
 
     // Internal State
     public float CurrentYaw { get; private set; }
@@ -124,12 +126,16 @@ public class PlayerController : MonoBehaviour
         {
             Debug.DrawLine(transform.position, transform.position + transform.forward * attackRange, Color.red, 1f);
 
+            slapFX.Play();
+            
             isAttacking = false;
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange, hitLayer))
             {
                 // Assuming ChaserEnemy exists in your project
                 hit.collider.GetComponent<ChaserEnemy>()?.Slap(rb.position, slapSide);
                 slapSide *= -1;
+                hitFX.transform.position = hit.point;
+                hitFX.Play();
             }
             Debug.Log($"<color=yellow>Attack Finished</color>");
         }

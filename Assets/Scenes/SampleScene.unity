@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!198 &7245216 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4119236966504243868, guid: bd636916ee1214e2e811c69325900ae2, type: 3}
+  m_PrefabInstance: {fileID: 671969300503899474}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &31555593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4630175135468249254, guid: bd636916ee1214e2e811c69325900ae2, type: 3}
@@ -1456,6 +1461,10 @@ PrefabInstance:
       propertyPath: anim
       value: 
       objectReference: {fileID: 31555594}
+    - target: {fileID: 7649131439583211929, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
+      propertyPath: slapFX
+      value: 
+      objectReference: {fileID: 7245216}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
