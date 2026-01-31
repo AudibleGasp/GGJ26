@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public bool PlayerProjectile = true;
+    
     [SerializeField] private bool destroyOnHit = true;
     [SerializeField] private float speed = 10f;
     [SerializeField] private Rigidbody rb;
@@ -26,11 +28,23 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if(PlayerProjectile)
         {
-            ChaserEnemy enemy = other.GetComponent<ChaserEnemy>();
-            enemy.TakeDamage(damage);
-            Main.Instance.PlayParticle(hitFX, transform.position);
+            if (other.CompareTag("Enemy"))
+            {
+                EnemyBase enemy = other.GetComponent<EnemyBase>();
+                enemy.TakeDamage(damage);
+                Main.Instance.PlayParticle(hitFX, transform.position);
+            }
+        }
+        else
+        {
+            if (other.CompareTag("Player"))
+            {
+                PlayerController player = other.GetComponent<PlayerController>();
+                player.OnHit();
+                Main.Instance.PlayParticle(hitFX, transform.position);
+            }
         }
 
         if (destroyOnHit || other.CompareTag("Ground"))

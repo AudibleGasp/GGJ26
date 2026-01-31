@@ -75,8 +75,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mask
   Type: 2
   rb: {fileID: 344579063424829725}
-  LifeTime: 5
-  CanPickUpAfter: 0.5
+  LifeTime: 10
+  CanPickUpAfter: 0.4
 --- !u!1 &8340670468123762013
 GameObject:
   m_ObjectHideFlags: 0

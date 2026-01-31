@@ -1,22 +1,15 @@
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class ChaserEnemy : MonoBehaviour
-{
-    private static readonly int Attack = Animator.StringToHash("Attack");
+public class ChaserEnemy : EnemyBase
+{private static readonly int Attack = Animator.StringToHash("Attack");
+    public enum EnemyState { Chasing, WindUp, Lunge, Recovering }
 
-    public enum EnemyState
-    {
-        Chasing, WindUp, Lunge, Recovering
-    }
-
-    [Header("Stats")]
-    [SerializeField] private float health = 30f;
+    [Header("Chaser Specifics")]
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float turnSpeed = 10f;
-    [SerializeField] private float acceleration = 20f; // General movement snappiness
-
+    [SerializeField] private float acceleration = 20f;
+    
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float windUpTime = 0.5f;
@@ -27,42 +20,29 @@ public class ChaserEnemy : MonoBehaviour
     [SerializeField] private float recoveryTime = 1f;
     [SerializeField] private float stopAcceleration = 10f; // How fast it brakes
 
-    [Header("References")]
-    [SerializeField] private Animator anim;
-    [SerializeField] private Renderer enemyRenderer;
-    [SerializeField] private MaskType mask;
-    [SerializeField] private Mask maskPrefab;
-    [SerializeField] private Transform maskTransform;
-
-    private Transform target;
-    private Rigidbody rb;
     private EnemyState currentState = EnemyState.Chasing;
     private float stateTimer;
     private Vector3 attackDirection;
-    private bool isDead = false;
 
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
-        rb.freezeRotation = true;
-
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj != null) target = playerObj.transform;
-
+        base.Start(); // Sets the target and Rigidbody
         ChangeState(EnemyState.Chasing);
     }
 
     void FixedUpdate()
     {
         if (isDead || target == null) return;
-
         UpdateStateLogic();
+        // Fall check
+        if (transform.position.y < -10) Destroy(gameObject);
+    }
 
-        if (transform.position.y < -10)
-        {
-            Destroy(gameObject);
-        }
+    // Overriding Slap so Chaser enters Recovery when hit
+    protected override void HandlePostMaskSlap(Vector3 direction)
+    {
+        base.HandlePostMaskSlap(direction);
+        ChangeState(EnemyState.Recovering);
     }
 
     private void UpdateStateLogic()
@@ -225,46 +205,6 @@ public class ChaserEnemy : MonoBehaviour
     {
         Rigidbody targetRb = collision.gameObject.GetComponent<Rigidbody>();
         targetRb.linearVelocity += (collision.transform.position - transform.position + Vector3.up * 2).normalized * 4;
-    }
-
-    public void Slap(Vector3 direction)
-    {
-        if (mask == MaskType.None)
-        {
-            ChangeState(EnemyState.Recovering);
-            rb.linearVelocity = direction * 10 + -transform.forward * 4;
-            return;
-        }
-        
-        DestroyMask(direction);
-    }
-
-    public void TakeDamage(float amount)
-    {
-        if (mask != MaskType.None)
-        {
-            // Reduce damage?
-        }
-        
-        health -= amount;
-        if (health <= 0)
-        {
-            DestroyMask(Vector3.up);
-            Destroy(gameObject);
-        }
-    }
-    
-    public void DestroyMask(Vector3 direction)
-    {
-        if (mask == MaskType.None)
-        {
-            return;
-        }
-        
-        mask = MaskType.None;
-        Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
-        spawnedMask.OnSlap(direction * 10);
-        maskTransform.gameObject.SetActive(false);
     }
 
     private void OnDrawGizmos()

@@ -948,12 +948,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPool:
-  - enemyName: 1
+  - enemyName: Smol
     enemyPrefab: {fileID: 2314560551520004511, guid: 09f72e76b5f744090a082bfed022ab5d, type: 3}
     powerValue: 1
-  - enemyName: 2
+  - enemyName: Big
     enemyPrefab: {fileID: 2314560551520004511, guid: 81f935cca02a9426eba696e72215ed1d, type: 3}
     powerValue: 4
+  - enemyName: Flying
+    enemyPrefab: {fileID: 2314560551520004511, guid: f575d0c35f0274f08aeea78bfb306899, type: 3}
+    powerValue: 5
   spawnCenter: {fileID: 829486589}
   spawnRadius: 30
   timeBetweenWaves: 8

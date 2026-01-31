@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
         // TODO Switch for different masks
         
-        var p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
+        Projectile p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
         p.Launch();
         
         masks.RemoveAt(0);

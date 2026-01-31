@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 2521271394477892408}
   - component: {fileID: 8011181833786798373}
   m_Layer: 11
-  m_Name: Projectile-Basic
+  m_Name: Projectile-Enemy-Flying
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,9 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b20581b694db4bbd897adc5d1d9ccaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
-  PlayerProjectile: 1
+  PlayerProjectile: 0
   destroyOnHit: 1
-  speed: 30
+  speed: 10
   rb: {fileID: 8011181833786798373}
   LifeTime: 5
   hitFX: 0
@@ -284,6 +284,18 @@ PrefabInstance:
     - target: {fileID: 86045586829760911, guid: 937f93a2dcd49ec408b3912942286860, type: 3}
       propertyPath: RotationModule.curve.minMaxState
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7552030703396208651, guid: 937f93a2dcd49ec408b3912942286860, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.19339621
+      objectReference: {fileID: 0}
+    - target: {fileID: 7552030703396208651, guid: 937f93a2dcd49ec408b3912942286860, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.22704662
+      objectReference: {fileID: 0}
+    - target: {fileID: 7552030703396208651, guid: 937f93a2dcd49ec408b3912942286860, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

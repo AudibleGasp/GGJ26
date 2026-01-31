@@ -187,5 +187,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mask
   Type: 1
   rb: {fileID: 7897463773086748924}
-  LifeTime: 5
-  CanPickUpAfter: 0.5
+  LifeTime: 10
+  CanPickUpAfter: 0.4
