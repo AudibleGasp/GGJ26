@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputVector;
     private bool jumpRequested;
 
-    private readonly List<MaskType> masks = new List<MaskType>();
+    public readonly List<MaskType> masks = new List<MaskType>();
     
     // Attack State
     private bool isAttacking;
