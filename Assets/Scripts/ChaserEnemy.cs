@@ -109,7 +109,7 @@ public class ChaserEnemy : MonoBehaviour
         float timer = 0;
         while (timer < windUpTime)
         {
-            rb.linearVelocity = -attackDir * windUpSpeed; 
+            rb.linearVelocity -= attackDir * (windUpSpeed * Time.deltaTime); 
             timer += Time.deltaTime;
             yield return null;
         }
@@ -157,7 +157,7 @@ public class ChaserEnemy : MonoBehaviour
     {
         if (mask == MaskType.None)
         {
-            rb.linearVelocity = (rb.position - sourcePos).normalized * 3 + Vector3.up * 3;
+            rb.linearVelocity = (rb.position - sourcePos + transform.right * direction).normalized * 5 + Vector3.up * 5;
             return;
         }
         

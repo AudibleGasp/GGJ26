@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public Projectile projectilePrefab;
     public ParticleSystem hitFX;
     public ParticleSystem slapFX;
+    public Transform muzzleTransform;
 
     // Internal State
     public float CurrentYaw { get; private set; }
@@ -114,7 +115,7 @@ public class PlayerController : MonoBehaviour
         
         // TODO Switch for different masks
         
-        var p = Instantiate(projectilePrefab, transform.position + anim.transform.forward * 2, anim.transform.rotation);
+        var p = Instantiate(projectilePrefab, muzzleTransform.position + muzzleTransform.forward * 2, muzzleTransform.rotation);
         p.Launch();
         
         masks.RemoveAt(0);
@@ -132,7 +133,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange, hitLayer))
             {
                 // Assuming ChaserEnemy exists in your project
-                hit.collider.GetComponent<ChaserEnemy>()?.Slap(rb.position, slapSide);
+                hit.collider.GetComponent<ChaserEnemy>().Slap(rb.position, slapSide);
                 slapSide *= -1;
                 hitFX.transform.position = hit.point;
                 hitFX.Play();
@@ -143,7 +144,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             nextAttackTime = Time.time + .2f;
-            PerformMask();
+            PerformMaskAction();
         }
         else if (Input.GetMouseButtonDown(0) && Time.time >= nextAttackTime)
         {
@@ -160,7 +161,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"<color=red>Attack Started!</color>");
     }
 
-    private void PerformMask()
+    private void PerformMaskAction()
     {
         anim.SetTrigger(Mask);
         UseNextMask();

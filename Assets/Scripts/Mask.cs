@@ -18,6 +18,8 @@ public class Mask : MonoBehaviour
     
     private float currentLife = 0;
 
+    private bool triggeredDespawnAnim;
+
     private void OnEnable()
     {
         currentLife = 0f;
