@@ -2,7 +2,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class ChaserEnemy : EnemyBase
-{private static readonly int Attack = Animator.StringToHash("Attack");
+{
+    private static readonly int Attack = Animator.StringToHash("Attack");
+    
     public enum EnemyState { Chasing, WindUp, Lunge, Recovering }
 
     [Header("Chaser Specifics")]
