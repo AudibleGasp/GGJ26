@@ -58,6 +58,11 @@ public class ChaserEnemy : MonoBehaviour
         if (isDead || target == null) return;
 
         UpdateStateLogic();
+
+        if (transform.position.y < -10)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void UpdateStateLogic()
@@ -195,24 +200,39 @@ public class ChaserEnemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // if (collision.gameObject.CompareTag("Enemy"))
-        // {
-        //     rb.linearVelocity -= (collision.transform.position - transform.position).normalized * 2;
-        // }
-        // else
-        if (currentState == EnemyState.Lunge && collision.gameObject.CompareTag("Player"))
+        if (currentState == EnemyState.Lunge)
         {
-            Debug.Log("Lunge Hit!");
-            // collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(damage);
+            rb.linearVelocity = -rb.linearVelocity / 2f;
+
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                PushTarget(collision);
+
+                // Damage
+                collision.gameObject.GetComponent<PlayerController>().OnHit();
+            }
+            
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                PushTarget(collision);
+            }
+            
+            // collision.gameObject.GetComponent<Rigidbody>().linearVelocity += Vector3.up * 5;
         }
     }
 
-    public void Slap(Vector3 sourcePos, int direction = 1)
+    private void PushTarget(Collision collision)
+    {
+        Rigidbody targetRb = collision.gameObject.GetComponent<Rigidbody>();
+        targetRb.linearVelocity += (collision.transform.position - transform.position + Vector3.up * 2).normalized * 4;
+    }
+
+    public void Slap(Vector3 direction)
     {
         if (mask == MaskType.None)
         {
             ChangeState(EnemyState.Recovering);
-            rb.linearVelocity = (rb.position - sourcePos + transform.right * direction).normalized * 5 + Vector3.up * 5;
+            rb.linearVelocity = direction * 10 + -transform.forward * 4;
             return;
         }
         
@@ -229,12 +249,12 @@ public class ChaserEnemy : MonoBehaviour
         health -= amount;
         if (health <= 0)
         {
-            DestroyMask(0);
+            DestroyMask(Vector3.up);
             Destroy(gameObject);
         }
     }
     
-    public void DestroyMask(int direction = 1)
+    public void DestroyMask(Vector3 direction)
     {
         if (mask == MaskType.None)
         {
@@ -243,7 +263,7 @@ public class ChaserEnemy : MonoBehaviour
         
         mask = MaskType.None;
         Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
-        spawnedMask.OnSlap(transform.right * (7 * direction) + Vector3.up * 6);
+        spawnedMask.OnSlap(direction * 10);
         maskTransform.gameObject.SetActive(false);
     }
 

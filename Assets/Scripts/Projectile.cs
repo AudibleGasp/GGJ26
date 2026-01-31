@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float LifeTime = 5f;
     [SerializeField] private ParticleFX hitFX;
+    [SerializeField] private int damage = 30;
 
     private float lifeTime;
 
@@ -28,7 +29,7 @@ public class Projectile : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             ChaserEnemy enemy = other.GetComponent<ChaserEnemy>();
-            enemy.TakeDamage(50);
+            enemy.TakeDamage(damage);
             Main.Instance.PlayParticle(hitFX, transform.position);
         }
 

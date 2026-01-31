@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,6 +51,7 @@ public class PlayerController : MonoBehaviour
     private int slapSide = 1;
     private float nextAttackTime;
     private float attackEndTime;
+    private float hitTimer;
 
     private void Start()
     {
@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
         {
             jumpRequested = true;
         }
+
+        hitTimer -= Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -104,7 +106,7 @@ public class PlayerController : MonoBehaviour
     public bool TryPickUpMask(MaskType type)
     {
         if(masks.Count >= MaskLimit) return false;
-        Debug.Log($"<color=cyan>Picked-up mask {type}!</color>");
+        // Debug.Log($"<color=cyan>Picked-up mask {type}!</color>");
         anim.SetTrigger(PickUp);
         masks.Add(type);
         return true;
@@ -143,7 +145,8 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange, hitLayer))
             {
                 // Assuming ChaserEnemy exists in your project
-                hit.collider.GetComponent<ChaserEnemy>().Slap(rb.position, slapSide);
+                var chaserEnemy = hit.collider.GetComponent<ChaserEnemy>();
+                chaserEnemy.Slap((transform.right * (slapSide * 2) + Vector3.up).normalized);
                 slapSide *= -1;
                 hitFX.transform.position = hit.point;
                 hitFX.Play();
@@ -169,6 +172,11 @@ public class PlayerController : MonoBehaviour
         attackEndTime = Time.time + attackDuration;
     }
 
+    public void OnHit()
+    {
+        hitTimer = 1f;
+    }
+
     private void PerformMaskAction()
     {
         anim.SetTrigger(Mask);
@@ -184,6 +192,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
+        if(hitTimer > 0) return; // Hit animation is playing (or hit timer is active)
+        
         Vector3 targetDirection = (transform.right * inputVector.x) + (transform.forward * inputVector.y);
 
         if (targetDirection.magnitude > 1)
