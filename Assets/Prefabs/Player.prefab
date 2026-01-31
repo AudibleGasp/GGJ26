@@ -103,6 +103,8 @@ MonoBehaviour:
   hitFX: {fileID: 6964330718212334597}
   slapFX: {fileID: 0}
   muzzleTransform: {fileID: 0}
+  maxLives: 3
+  currentLives: 3
 --- !u!136 &3098836573367861687
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5331,7 +5333,7 @@ Transform:
   m_GameObject: {fileID: 3921336949725733829}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5356,5 +5358,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 1.25
   m_Center: {x: 0, y: 0, z: 0}
