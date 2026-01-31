@@ -1,3 +1,4 @@
+using PrimeTween;
 using UnityEngine;
 
 public enum ParticleFX
@@ -24,7 +25,7 @@ public class Main : MonoBehaviour
         Instance = this;
     }
     
-    public void PlayParticle(ParticleFX fxType, Vector3 position)
+    public void PlayParticle(ParticleFX fxType, Vector3 position, int count = 1)
     {
         ParticleSystem ps = fxType switch
         {
@@ -36,6 +37,6 @@ public class Main : MonoBehaviour
         };
         
         ps.transform.position = position;
-        ps.Emit(1);
+        ps.Emit(count);
     }
 }

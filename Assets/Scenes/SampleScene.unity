@@ -1505,17 +1505,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1554442242 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5425538726211274122, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
-  m_PrefabInstance: {fileID: 3296590750085863597}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f37251e46b5554033824e17922cfd876, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WindBlastAbility
 --- !u!1001 &1574556607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1962,6 +1951,11 @@ ParticleSystem:
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 259350611077103306, guid: a44ae18e3a3254003bf91914cf4f89b6, type: 3}
   m_PrefabInstance: {fileID: 1948849684}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1977262708 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4078151650637986482, guid: bd636916ee1214e2e811c69325900ae2, type: 3}
+  m_PrefabInstance: {fileID: 671969300503899474}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &671969300503899474
 PrefabInstance:
@@ -2786,9 +2780,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7245216}
     - target: {fileID: 7649131439583211929, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
-      propertyPath: windAbility
+      propertyPath: handsTransform
       value: 
-      objectReference: {fileID: 1554442242}
+      objectReference: {fileID: 1977262708}
     - target: {fileID: 7649131439583211929, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
       propertyPath: muzzleTransform
       value: 

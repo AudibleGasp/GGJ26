@@ -22,6 +22,8 @@ public class ChaserEnemy : EnemyBase
     [SerializeField] private float recoveryTime = 1f;
     [SerializeField] private float stopAcceleration = 10f; // How fast it brakes
 
+    [Space(10)] [SerializeField] private GameObject attackingFX;
+
     private EnemyState currentState = EnemyState.Chasing;
     private float stateTimer;
     private Vector3 attackDirection;
@@ -139,6 +141,8 @@ public class ChaserEnemy : EnemyBase
     {
         currentState = newState;
         stateTimer = 0;
+        
+        attackingFX.SetActive(newState == EnemyState.Lunge);
 
         switch (newState)
         {

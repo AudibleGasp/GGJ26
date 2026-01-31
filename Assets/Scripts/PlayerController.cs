@@ -37,7 +37,9 @@ public class PlayerController : MonoBehaviour
     public Projectile penetratingProjectilePrefab;
     public ParticleSystem hitFX;
     public ParticleSystem slapFX;
+    public ParticleSystem jumpLandFX;
     public Transform muzzleTransform;
+    public Transform handsTransform;
 
     [Header("Health")]
     public int maxLives = 3;
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
     private float attackEndTime;
     private float hitTimer;
 
+    private bool wasAirborne;
     public bool IsAirborne => !IsGrounded();
 
     private void Start()
@@ -85,12 +88,25 @@ public class PlayerController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
         inputVector = new Vector2(moveX, moveZ);
 
+        bool isGrounded = IsGrounded();
+
+        if (wasAirborne)
+        {
+            if (isGrounded)
+            {
+                jumpLandFX.Play();
+                wasAirborne = false;
+            }
+        }
+
         // 4. Check Jump Input
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             jumpRequested = true;
         }
-
+        
+        wasAirborne = !isGrounded;
+        
         hitTimer -= Time.deltaTime;
     }
 
@@ -119,7 +135,7 @@ public class PlayerController : MonoBehaviour
         masks.Add(type);
         return true;
     }
-
+    
     public void UseNextMask()
     {
         if (masks.Count <= 0) 
@@ -161,6 +177,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isAttacking && Time.time >= attackEndTime)
         {
+            handsTransform.localScale = new Vector3(Random.value > .5f ? 1 : -1, 1, 1);
             Debug.DrawLine(transform.position, transform.position + muzzleTransform.forward * attackRange, Color.red, 1f);
 
             slapFX.Play();

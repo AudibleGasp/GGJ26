@@ -48,7 +48,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        if (destroyOnHit || transform.position.y < -1f)
+        if (destroyOnHit || transform.position.y < 0f)
         {
             Destroy(gameObject);
             Main.Instance.PlayParticle(hitFX, transform.position);

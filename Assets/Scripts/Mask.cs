@@ -1,4 +1,5 @@
 using System;
+using PrimeTween;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,12 +27,15 @@ public class Mask : MonoBehaviour
     {
         currentLife = 0f;
     }
-
+    
     private void Update()
     {
         if (currentLife > LifeTime)
         {
-            Destroy(gameObject);
+            Tween.Scale(transform, 0f, .1f).OnComplete(gameObject, _ =>
+            {
+                Destroy(gameObject);
+            }, false);
         }
         
         currentLife += Time.deltaTime;
@@ -47,6 +51,7 @@ public class Mask : MonoBehaviour
         PlayerController player = Main.Instance.PlayerController;
         if(player.TryPickUpMask(Type))
         {
+            Main.Instance.PlayParticle(ParticleFX.Sparks, transform.position, 2);
             Destroy(gameObject);
         }
     }
