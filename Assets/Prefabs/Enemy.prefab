@@ -142,18 +142,20 @@ MonoBehaviour:
   health: 30
   moveSpeed: 5
   turnSpeed: 25
-  mask: 1
+  acceleration: 20
   attackRange: 2
   windUpTime: 0.5
-  windUpSpeed: 4
+  windUpAcceleration: 5
   lungeDuration: 0.4
   lungeSpeed: 12
-  recoveryTime: 1
-  damage: 15
+  lungeAcceleration: 50
+  recoveryTime: 0.5
+  stopAcceleration: 10
   anim: {fileID: 344038110541029545}
+  enemyRenderer: {fileID: 3223787537277008884}
+  mask: 1
   maskPrefab: {fileID: 1374598438042627696, guid: 9ca5ecf0710994e9498918568625b527, type: 3}
   maskTransform: {fileID: 7616527598354411403}
-  enemyRenderer: {fileID: 3223787537277008884}
 --- !u!136 &7494680958139810513
 CapsuleCollider:
   m_ObjectHideFlags: 0

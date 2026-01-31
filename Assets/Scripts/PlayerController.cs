@@ -138,7 +138,6 @@ public class PlayerController : MonoBehaviour
                 hitFX.transform.position = hit.point;
                 hitFX.Play();
             }
-            Debug.Log($"<color=yellow>Attack Finished</color>");
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -158,7 +157,6 @@ public class PlayerController : MonoBehaviour
         isAttacking = true;
         nextAttackTime = Time.time + attackCooldown;
         attackEndTime = Time.time + attackDuration;
-        Debug.Log($"<color=red>Attack Started!</color>");
     }
 
     private void PerformMaskAction()
