@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 7649131439583211929}
   - component: {fileID: 3098836573367861687}
   - component: {fileID: 2847630309457399869}
+  - component: {fileID: 5425538726211274122}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -155,6 +156,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &5425538726211274122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159478135141592285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37251e46b5554033824e17922cfd876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WindBlastAbility
+  activationKey: 103
+  cooldownTime: 1
+  heightOffset: 0
+  forwardOffset: 1
+  hitboxSize: {x: 4, y: 2, z: 6}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  pushForce: 20
+  liftForce: 7
+  windVFXPrefab: {fileID: 5357767409460153518, guid: e66b281a3f9834b5da4f8de34f4d128c, type: 3}
 --- !u!1 &2550631301213932345
 GameObject:
   m_ObjectHideFlags: 0
