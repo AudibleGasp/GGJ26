@@ -6,9 +6,10 @@ public class WindBlastAbility : MonoBehaviour
     public KeyCode activationKey = KeyCode.G;
     public float cooldownTime = 1.0f;
 
-    [Header("Pozisyon Ayarları (SpawnPoint Yok)")]
-    public float heightOffset = .0f;   // Yerden ne kadar yukarıda? (Kamera hizası için 1.5 iyi)
+    [Header("Pozisyon Ayarları")]
+    public float heightOffset = .25f;   // Yerden ne kadar yukarıda? (Kamera hizası için 1.5 iyi)
     public float forwardOffset = 1.0f;  // Karakterin ne kadar önünde?
+    public float leftRightOffset = .33f;
 
     [Header("Vuruş Alanı (Hitbox)")]
     // X: Genişlik, Y: Yükseklik, Z: İleri Uzunluk
@@ -22,6 +23,10 @@ public class WindBlastAbility : MonoBehaviour
     [Header("Görsel")]
     public GameObject windVFXPrefab; 
 
+    [Header("Maske Fırlatma Ayarı")]
+    public float maskLiftAmount = 2.0f; // Ne kadar dik yukarı fırlasın?
+    public float maskPushAmount = 1.0f; // Ne kadar uzağa (geriye) gitsin?
+
     private float lastFireTime;
 
     void Update()
@@ -33,13 +38,14 @@ public class WindBlastAbility : MonoBehaviour
         }
     }
 
-    void PerformInstantBlast()
+    public void PerformInstantBlast()
     {
         // 1. MERKEZ NOKTAYI HESAPLA
         // Karakterin Merkezi + Yukarı + İleri
         Vector3 blastCenter = transform.position 
                               + (Vector3.up * heightOffset) 
-                              + (transform.forward * forwardOffset);
+                              + (transform.forward * forwardOffset)
+                              + (transform.right * leftRightOffset);
 
         // 2. GÖRSELİ OLUŞTUR
         if (windVFXPrefab != null)
@@ -56,19 +62,28 @@ public class WindBlastAbility : MonoBehaviour
         {
             foreach (Collider hit in hits)
             {
+                // A. FİZİKSEL İTME (Mevcut Kod)
                 Rigidbody enemyRb = hit.GetComponent<Rigidbody>();
-
                 if (enemyRb != null)
                 {
-                    // Düşmanı anlık durdur (Daha sert vuruş hissi için)
-                    enemyRb.linearVelocity = Vector3.zero;
-
-                    // İtme Yönü: Karakterin baktığı yön
+                    enemyRb.linearVelocity = Vector3.zero; // Hızı sıfırla
+                    
                     Vector3 pushDir = transform.forward;
-
-                    // Kuvvet Uygula
                     enemyRb.AddForce((pushDir * pushForce) + (Vector3.up * liftForce), ForceMode.Impulse);
                 }
+
+                // B. MASKE DÜŞÜRME (YENİ EKLENEN KISIM) ---------------------------
+                // Çarptığımız objede EnemyBase (veya ChaserEnemy) var mı diye bakıyoruz
+                EnemyBase enemyBase = hit.GetComponent<EnemyBase>();
+                
+                if (enemyBase != null)
+                {
+                    // YÖN HESABI: Hem yukarı (Up) hem de rüzgar yönünde (Forward) kuvvet uygula
+                    Vector3 maskDir = (Vector3.up * maskLiftAmount) + (transform.forward * maskPushAmount);
+                    
+                    enemyBase.DestroyMask(maskDir);
+                }
+                // ------------------------------------------------------------------
             }
         }
     }

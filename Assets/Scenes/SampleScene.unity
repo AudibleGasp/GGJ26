@@ -984,6 +984,9 @@ MonoBehaviour:
   - enemyName: Flying
     enemyPrefab: {fileID: 2314560551520004511, guid: f575d0c35f0274f08aeea78bfb306899, type: 3}
     powerValue: 5
+  - enemyName: Wind
+    enemyPrefab: {fileID: 2314560551520004511, guid: 9cb8e414ca60f4cffb90c0b4c5fed4cd, type: 3}
+    powerValue: 2
   spawnCenter: {fileID: 829486589}
   spawnRadius: 30
   timeBetweenWaves: 8
@@ -1154,6 +1157,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1554442242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5425538726211274122, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
+  m_PrefabInstance: {fileID: 3296590750085863597}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37251e46b5554033824e17922cfd876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WindBlastAbility
 --- !u!1001 &1574556607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1489,6 +1503,10 @@ PrefabInstance:
       propertyPath: slapFX
       value: 
       objectReference: {fileID: 7245216}
+    - target: {fileID: 7649131439583211929, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
+      propertyPath: windAbility
+      value: 
+      objectReference: {fileID: 1554442242}
     - target: {fileID: 7649131439583211929, guid: aee6372abd8954757810d3acb77dd1e0, type: 3}
       propertyPath: muzzleTransform
       value: 

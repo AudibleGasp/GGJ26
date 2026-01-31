@@ -83,6 +83,9 @@ public class MaskUIManager : MonoBehaviour
             case MaskType.Penetrating:
                 maskColor = Color.red; // Örnek: Delici maske kırmızı olsun
                 break;
+            case MaskType.Wind:
+                maskColor = Color.yellow;
+                break;
             // Diğer tipler buraya eklenebilir
         }
         newMask.GetComponent<Image>().color = maskColor;

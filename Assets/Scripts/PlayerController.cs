@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour
     public int maxLives = 3;
     public int currentLives = 3; // Mevcut can
 
+    [Header("Abilities")]
+    public WindBlastAbility windAbility; // Inspector'dan buraya scripti sürükleyeceksin    
+
     // Internal State
     public float CurrentYaw { get; private set; }
     private Vector2 inputVector;
@@ -121,19 +124,35 @@ public class PlayerController : MonoBehaviour
         if (masks.Count <= 0) 
             return;
 
-        var projectileToSpawn = masks[0] switch
+        // EĞER RÜZGAR MASKESİ İSE -> YETENEK KULLAN
+        if (masks[0] == MaskType.Wind)
         {
-            MaskType.None => basicProjectilePrefab,
-            MaskType.Basic => basicProjectilePrefab,
-            MaskType.Penetrating => penetratingProjectilePrefab,
-            _ => basicProjectilePrefab
-        };
+            if (windAbility != null)
+            {
+                windAbility.PerformInstantBlast();
+            }
+        }
+        // DEĞİLSE -> MERMİ FIRLAT (Orijinal kodun buraya taşındı)
+        else
+        {
+            var projectileToSpawn = masks[0] switch
+            {
+                MaskType.None => basicProjectilePrefab,
+                MaskType.Basic => basicProjectilePrefab,
+                MaskType.Penetrating => penetratingProjectilePrefab,
+                _ => basicProjectilePrefab
+            };
 
-        // TODO Switch for different masks
+            // TODO Switch for different masks
+            
+            if (projectileToSpawn != null)
+            {
+                Projectile p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
+                p.Launch();
+            }
+        }
         
-        Projectile p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
-        p.Launch();
-        
+        // Maskeyi listeden sil
         masks.RemoveAt(0);
     }
 

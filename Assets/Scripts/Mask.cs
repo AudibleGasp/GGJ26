@@ -6,7 +6,8 @@ public enum MaskType
 {
     None,
     Basic,
-    Penetrating
+    Penetrating,
+    Wind
 }
 
 public class Mask : MonoBehaviour

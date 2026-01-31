@@ -106,6 +106,7 @@ MonoBehaviour:
   muzzleTransform: {fileID: 0}
   maxLives: 3
   currentLives: 3
+  windAbility: {fileID: 0}
 --- !u!136 &3098836573367861687
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -170,8 +171,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WindBlastAbility
   activationKey: 103
   cooldownTime: 1
-  heightOffset: 0
+  heightOffset: 0.25
   forwardOffset: 1
+  leftRightOffset: 0.33
   hitboxSize: {x: 4, y: 2, z: 6}
   enemyLayer:
     serializedVersion: 2
@@ -179,6 +181,8 @@ MonoBehaviour:
   pushForce: 20
   liftForce: 7
   windVFXPrefab: {fileID: 5357767409460153518, guid: e66b281a3f9834b5da4f8de34f4d128c, type: 3}
+  maskLiftAmount: 1
+  maskPushAmount: 0.3
 --- !u!1 &2550631301213932345
 GameObject:
   m_ObjectHideFlags: 0
