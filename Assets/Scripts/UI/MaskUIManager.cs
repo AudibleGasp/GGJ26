@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,6 +6,13 @@ using DG.Tweening;
 
 public class MaskUIManager : MonoBehaviour
 {
+    [Serializable]
+    public class MaskEntry
+    {
+        public MaskType Type;
+        public GameObject Prefab;
+    }
+    
     [Header("Referanslar")]
     public PlayerController playerController; // Inspector'dan Player'ı sürükle veya kod bulsun
     
@@ -12,7 +20,7 @@ public class MaskUIManager : MonoBehaviour
     public Transform maskContainer;    
     // Sıralama: Element 0: Slot 1 (EN ALT), Element 1: Ortadaki, Element 2: Slot 3 (EN ÜST)
     public Transform[] slots;          
-    public GameObject maskPrefab;      
+    public List<MaskEntry> maskEntries;      
     public Transform movingMaskParent; 
 
     [Header("Animasyon Ayarları")]
@@ -29,6 +37,16 @@ public class MaskUIManager : MonoBehaviour
         // Eğer Inspector'dan atamadıysan otomatik bul
         if (playerController == null)
             playerController = FindFirstObjectByType<PlayerController>();
+    }
+
+    public GameObject GetMaskPrefab(MaskType type)
+    {
+        foreach (MaskEntry entry in maskEntries)
+        {
+            if (entry.Type == type) 
+                return entry.Prefab;
+        }
+        return null;
     }
 
     private void Update()
@@ -70,26 +88,7 @@ public class MaskUIManager : MonoBehaviour
         // Güvenlik: Slot sayısını aşarsa görsel oluşturma
         if (activeVisualMasks.Count >= slots.Length) return;
 
-        GameObject newMask = Instantiate(maskPrefab, movingMaskParent);
-
-        // --- MASKE TİPİNE GÖRE RENK AYARI ---
-        // PlayerController'daki enum'a göre renk veriyoruz.
-        Color maskColor = Color.white;
-        switch (type)
-        {
-            case MaskType.Basic:
-                maskColor = Color.white; 
-                break;
-            case MaskType.Penetrating:
-                maskColor = Color.red; // Örnek: Delici maske kırmızı olsun
-                break;
-            case MaskType.Wind:
-                maskColor = Color.yellow;
-                break;
-            // Diğer tipler buraya eklenebilir
-        }
-        newMask.GetComponent<Image>().color = maskColor;
-        // -------------------------------------
+        GameObject newMask = Instantiate(GetMaskPrefab(type), movingMaskParent);
 
         // DİKEY DOĞMA POZİSYONU (En üst slotun üzerinden)
         Vector3 startPos = slots[slots.Length - 1].position;

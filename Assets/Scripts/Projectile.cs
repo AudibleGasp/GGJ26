@@ -48,7 +48,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        if (destroyOnHit || other.CompareTag("Ground"))
+        if (destroyOnHit || transform.position.y < -1f)
         {
             Destroy(gameObject);
             Main.Instance.PlayParticle(hitFX, transform.position);
@@ -60,6 +60,6 @@ public class Projectile : MonoBehaviour
         Rigidbody targetRb = other.gameObject.GetComponent<Rigidbody>();
         var dir = other.transform.position - transform.position;
         dir.y = 0;
-        targetRb.linearVelocity += (dir + Vector3.up * 2).normalized * 4;
+        targetRb.linearVelocity += (dir.normalized * 2 + Vector3.up).normalized * 10;
     }
 }

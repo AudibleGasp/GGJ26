@@ -97,8 +97,6 @@ public class RangedFlyingEnemy : EnemyBase
 
     private void FireProjectile()
     {
-        if (projectileToSpawn == null || muzzleTransform == null) return;
-
         // Use the requested instantiation and launch logic
         Projectile p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
         p.Launch();

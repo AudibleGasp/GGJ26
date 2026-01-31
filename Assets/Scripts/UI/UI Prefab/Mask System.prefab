@@ -198,16 +198,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f30c338ce30b54cfe8f48ea4725e9a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaskUIManager
+  playerController: {fileID: 0}
   maskContainer: {fileID: 6821107167176320710}
   slots:
   - {fileID: 5960305141503953229}
   - {fileID: 1796479641641603568}
   - {fileID: 8556549341171149837}
-  maskPrefab: {fileID: 2818482306626683786, guid: f89a6ff03a659406ca4d2b267956c0bb, type: 3}
+  maskEntries:
+  - Type: 1
+    Prefab: {fileID: 182147439203911989, guid: 5e47887222a7b4c518db4c4f048ed503, type: 3}
+  - Type: 2
+    Prefab: {fileID: 182147439203911989, guid: a1e2c7f5b857843928a97384c1356d83, type: 3}
+  - Type: 3
+    Prefab: {fileID: 182147439203911989, guid: f89a6ff03a659406ca4d2b267956c0bb, type: 3}
   movingMaskParent: {fileID: 6358252796095222044}
   slideDuration: 0.5
   startDistance: 1500
-  overshootAmount: 1.07
+  overshootAmount: 1.1
+  containerPunchAmount: 0.2
 --- !u!1 &8440425650371959614
 GameObject:
   m_ObjectHideFlags: 0

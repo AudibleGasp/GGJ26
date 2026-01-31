@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3801549058163096222}
   - component: {fileID: 7634793671811205956}
   - component: {fileID: 9172521033470463733}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 467919585367258250}
   - component: {fileID: 2521271394477892408}
   - component: {fileID: 8011181833786798373}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Projectile-Enemy-Flying
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
+  m_Radius: 0.4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2521271394477892408
 MonoBehaviour:
@@ -217,6 +217,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_Shoot_Gas_projectile
       objectReference: {fileID: 0}
+    - target: {fileID: 871758662454225522, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 871758662454225527, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.41664
@@ -282,6 +286,10 @@ PrefabInstance:
       value: 0.61089355
       objectReference: {fileID: 0}
     - target: {fileID: 8161559374818631311, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161559374818631311, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -298,8 +306,16 @@ PrefabInstance:
       value: 0.2971698
       objectReference: {fileID: 0}
     - target: {fileID: 8539899532037963003, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539899532037963003, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911275279356539857, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8911275279356539859, guid: 1056ef8b7376d13438d1cd3d3e9e732b, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b

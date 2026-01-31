@@ -387,11 +387,11 @@ MonoBehaviour:
   maskPrefab: {fileID: 1374598438042627696, guid: 9ca5ecf0710994e9498918568625b527, type: 3}
   maskTransform: {fileID: 5121724385132802799}
   anim: {fileID: 344038110541029545}
-  flySpeed: 5
-  stopDistance: 3
-  maneuverPeriod: 5
-  offsetRadius: 4
-  heightOffset: 4
+  flySpeed: 4
+  stopDistance: 2
+  maneuverPeriod: 7
+  offsetRadius: 12
+  heightOffset: 5
   projectileToSpawn: {fileID: 2521271394477892408, guid: a04084373a5714076bdc1bfefdae4699, type: 3}
   muzzleTransform: {fileID: 595040995683271905}
 --- !u!54 &3800789202736230437
