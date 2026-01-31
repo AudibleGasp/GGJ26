@@ -144,8 +144,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.8, y: 0.7, z: 0.8}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7616527598354411403}
   - {fileID: 595040995683271905}
@@ -221,14 +221,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChaserEnemy
   health: 30
-  moveSpeed: 3
-  turnSpeed: 10
+  moveSpeed: 7
+  turnSpeed: 25
   mask: 1
   attackRange: 2
   windUpTime: 0.5
   windUpSpeed: 4
   lungeDuration: 0.4
-  lungeSpeed: 10
+  lungeSpeed: 12
   recoveryTime: 1
   damage: 15
   anim: {fileID: 344038110541029545}
