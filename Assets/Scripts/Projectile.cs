@@ -42,6 +42,7 @@ public class Projectile : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 PlayerController player = other.GetComponent<PlayerController>();
+                PushTarget(other);
                 player.OnHit();
                 Main.Instance.PlayParticle(hitFX, transform.position);
             }
@@ -52,5 +53,13 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
             Main.Instance.PlayParticle(hitFX, transform.position);
         }
+    }
+
+    private void PushTarget(Collider other)
+    {
+        Rigidbody targetRb = other.gameObject.GetComponent<Rigidbody>();
+        var dir = other.transform.position - transform.position;
+        dir.y = 0;
+        targetRb.linearVelocity += (dir + Vector3.up * 2).normalized * 4;
     }
 }

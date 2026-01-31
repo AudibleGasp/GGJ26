@@ -47,16 +47,16 @@ public abstract class EnemyBase : MonoBehaviour
             return;
         }
         
-        DestroyMask(direction);
+        DestroyMask();
     }
 
     protected virtual void HandlePostMaskSlap(Vector3 direction)
     {
         // Default behavior: get knocked back
-        rb.linearVelocity = direction * 10 + -transform.forward * 4;
+        rb.linearVelocity = direction * 13;
     }
 
-    public void DestroyMask(Vector3 direction)
+    public void DestroyMask()
     {
         if (mask == MaskType.None) return;
         
@@ -64,7 +64,8 @@ public abstract class EnemyBase : MonoBehaviour
         if (maskPrefab != null && maskTransform != null)
         {
             Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
-            spawnedMask.OnSlap(direction * 10);
+            float side = Random.value > .5f ? 1 : -1;
+            spawnedMask.OnSlap((transform.right * side + Vector3.up * .75f) * 8);
             maskTransform.gameObject.SetActive(false);
         }
     }
@@ -72,7 +73,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Die()
     {
         isDead = true;
-        DestroyMask(Vector3.up);
+        DestroyMask();
         Destroy(gameObject);
     }
 

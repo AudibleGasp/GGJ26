@@ -55,7 +55,6 @@ public class PlayerController : MonoBehaviour
     
     // Attack State
     private bool isAttacking;
-    private int slapSide = 1;
     private float nextAttackTime;
     private float attackEndTime;
     private float hitTimer;
@@ -129,7 +128,7 @@ public class PlayerController : MonoBehaviour
         {
             if (windAbility != null)
             {
-                windAbility.PerformInstantBlast();
+                windAbility.PerformInstantBlast(muzzleTransform);
             }
         }
         // DEĞİLSE -> MERMİ FIRLAT (Orijinal kodun buraya taşındı)
@@ -160,17 +159,16 @@ public class PlayerController : MonoBehaviour
     {
         if (isAttacking && Time.time >= attackEndTime)
         {
-            Debug.DrawLine(transform.position, transform.position + transform.forward * attackRange, Color.red, 1f);
+            Debug.DrawLine(transform.position, transform.position + muzzleTransform.forward * attackRange, Color.red, 1f);
 
             slapFX.Play();
             
             isAttacking = false;
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange, hitLayer))
+            if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out RaycastHit hit, attackRange, hitLayer))
             {
                 // Assuming ChaserEnemy exists in your project
-                var chaserEnemy = hit.collider.GetComponent<ChaserEnemy>();
-                chaserEnemy.Slap((transform.right * (slapSide * 2) + Vector3.up).normalized);
-                slapSide *= -1;
+                EnemyBase enemy = hit.collider.GetComponent<EnemyBase>();
+                enemy.Slap((muzzleTransform.forward * 2 + Vector3.up * 1.5f).normalized);
                 hitFX.transform.position = hit.point;
                 hitFX.Play();
             }
@@ -197,7 +195,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnHit()
     {
-        hitTimer = 1f;
+        hitTimer = .4f;
     }
 
     private void PerformMaskAction()

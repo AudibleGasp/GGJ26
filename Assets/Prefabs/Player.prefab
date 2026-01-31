@@ -174,7 +174,7 @@ MonoBehaviour:
   heightOffset: 0.25
   forwardOffset: 1
   leftRightOffset: 0.33
-  hitboxSize: {x: 4, y: 2, z: 6}
+  hitboxSize: {x: 4, y: 2, z: 8}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256

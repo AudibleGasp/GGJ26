@@ -33,30 +33,30 @@ public class WindBlastAbility : MonoBehaviour
     {
         if (Input.GetKeyDown(activationKey) && Time.time >= lastFireTime + cooldownTime)
         {
-            PerformInstantBlast();
+            PerformInstantBlast(transform);
             lastFireTime = Time.time;
         }
     }
 
-    public void PerformInstantBlast()
+    public void PerformInstantBlast(Transform performer)
     {
         // 1. MERKEZ NOKTAYI HESAPLA
         // Karakterin Merkezi + Yukarı + İleri
-        Vector3 blastCenter = transform.position 
+        Vector3 blastCenter = performer.position 
                               + (Vector3.up * heightOffset) 
-                              + (transform.forward * forwardOffset)
-                              + (transform.right * leftRightOffset);
+                              + (performer.forward * forwardOffset)
+                              + (performer.right * leftRightOffset);
 
         // 2. GÖRSELİ OLUŞTUR
         if (windVFXPrefab != null)
         {
-            GameObject vfx = Instantiate(windVFXPrefab, blastCenter, transform.rotation);
+            GameObject vfx = Instantiate(windVFXPrefab, blastCenter, performer.rotation);
             Destroy(vfx, 2.0f); // 2 saniye sonra sil
         }
 
         // 3. ANLIK ALAN TARAMASI (OverlapBox)
         // Hesaplanan 'blastCenter' noktasında kutuyu oluştur
-        Collider[] hits = Physics.OverlapBox(blastCenter, hitboxSize / 2, transform.rotation, enemyLayer);
+        Collider[] hits = Physics.OverlapBox(blastCenter, hitboxSize / 2, performer.rotation, enemyLayer);
 
         if (hits.Length > 0)
         {
@@ -68,7 +68,7 @@ public class WindBlastAbility : MonoBehaviour
                 {
                     enemyRb.linearVelocity = Vector3.zero; // Hızı sıfırla
                     
-                    Vector3 pushDir = transform.forward;
+                    Vector3 pushDir = performer.forward;
                     enemyRb.AddForce((pushDir * pushForce) + (Vector3.up * liftForce), ForceMode.Impulse);
                 }
 
@@ -79,9 +79,9 @@ public class WindBlastAbility : MonoBehaviour
                 if (enemyBase != null)
                 {
                     // YÖN HESABI: Hem yukarı (Up) hem de rüzgar yönünde (Forward) kuvvet uygula
-                    Vector3 maskDir = (Vector3.up * maskLiftAmount) + (transform.forward * maskPushAmount);
+                    // Vector3 maskDir = (Vector3.up * maskLiftAmount) + (transform.forward * maskPushAmount);
                     
-                    enemyBase.DestroyMask(maskDir);
+                    enemyBase.DestroyMask();
                 }
                 // ------------------------------------------------------------------
             }
