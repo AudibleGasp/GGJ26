@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private static readonly int Attack = Animator.StringToHash("Attack");
+    private static readonly int Mask = Animator.StringToHash("Mask");
     private static readonly int PickUp = Animator.StringToHash("PickUp");
 
     [Header("Movement")]
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public Rigidbody rb;
     public Animator anim;
+    public Projectile projectilePrefab;
 
     // Internal State
     private float currentYaw = 0f; // Stores the horizontal rotation
@@ -104,7 +106,15 @@ public class PlayerController : MonoBehaviour
 
     public void UseNextMask()
     {
-        if (masks.Count <= 0) return;
+        if (masks.Count <= 0) 
+            return;
+        
+        // TODO Switch for different masks
+        
+        var p = Instantiate(projectilePrefab, transform.position + anim.transform.forward * 2, anim.transform.rotation);
+        p.Launch();
+        
+        masks.RemoveAt(0);
     }
 
     private void HandleAttack()
@@ -117,12 +127,17 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, attackRange, hitLayer))
             {
                 // Assuming ChaserEnemy exists in your project
-                hit.collider.GetComponent<ChaserEnemy>()?.Slap(); 
+                hit.collider.GetComponent<ChaserEnemy>()?.Slap(rb.position); 
             }
             Debug.Log($"<color=yellow>Attack Finished</color>");
         }
 
-        if (Input.GetMouseButtonDown(0) && Time.time >= nextAttackTime)
+        if (Input.GetMouseButtonDown(1))
+        {
+            nextAttackTime = Time.time + .2f;
+            PerformMask();
+        }
+        else if (Input.GetMouseButtonDown(0) && Time.time >= nextAttackTime)
         {
             PerformAttack();
         }
@@ -135,6 +150,12 @@ public class PlayerController : MonoBehaviour
         nextAttackTime = Time.time + attackCooldown;
         attackEndTime = Time.time + attackDuration;
         Debug.Log($"<color=red>Attack Started!</color>");
+    }
+
+    private void PerformMask()
+    {
+        anim.SetTrigger(Mask);
+        UseNextMask();
     }
 
     private void HandleLookInput()

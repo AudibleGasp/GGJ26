@@ -97,6 +97,7 @@ MonoBehaviour:
   MaskLimit: 3
   rb: {fileID: 2847630309457399869}
   anim: {fileID: 0}
+  projectilePrefab: {fileID: 2521271394477892408, guid: e28652a60189e40b78e19455d6b8a5c2, type: 3}
 --- !u!136 &3098836573367861687
 CapsuleCollider:
   m_ObjectHideFlags: 0

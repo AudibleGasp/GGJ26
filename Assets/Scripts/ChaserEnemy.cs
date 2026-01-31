@@ -151,23 +151,39 @@ public class ChaserEnemy : MonoBehaviour
         }
     }
 
-    public void Slap()
+    public void Slap(Vector3 sourcePos)
     {
         if (mask == MaskType.None)
+        {
+            rb.linearVelocity = (rb.position - sourcePos).normalized * 3 + Vector3.up * 3;
             return;
+        }
         
         DestroyMask();
     }
 
     public void TakeDamage(float amount)
     {
+        if (mask != MaskType.None)
+        {
+            // Reduce damage ?
+        }
+        
         health -= amount;
         if (health <= 0)
+        {
+            DestroyMask();
             Destroy(gameObject);
+        }
     }
     
     public void DestroyMask()
     {
+        if (mask == MaskType.None)
+        {
+            return;
+        }
+        
         mask = MaskType.None;
         Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
         spawnedMask.OnSlap(transform.right * 7 + Vector3.up * 5);
