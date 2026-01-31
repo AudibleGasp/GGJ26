@@ -6,6 +6,7 @@ public enum MaskType
 {
     None,
     Basic,
+    Penetrating
 }
 
 public class Mask : MonoBehaviour

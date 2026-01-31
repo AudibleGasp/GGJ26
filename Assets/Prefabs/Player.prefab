@@ -98,9 +98,11 @@ MonoBehaviour:
   MaskLimit: 3
   rb: {fileID: 2847630309457399869}
   anim: {fileID: 0}
-  projectilePrefab: {fileID: 2521271394477892408, guid: e28652a60189e40b78e19455d6b8a5c2, type: 3}
+  basicProjectilePrefab: {fileID: 2521271394477892408, guid: e28652a60189e40b78e19455d6b8a5c2, type: 3}
+  penetratingProjectilePrefab: {fileID: 2419347975802759727, guid: f4157cda728f044fd828228a443dc9f5, type: 3}
   hitFX: {fileID: 6964330718212334597}
   slapFX: {fileID: 0}
+  muzzleTransform: {fileID: 0}
 --- !u!136 &3098836573367861687
 CapsuleCollider:
   m_ObjectHideFlags: 0

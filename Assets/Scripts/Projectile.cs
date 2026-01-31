@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] private bool destroyOnHit = true;
     [SerializeField] private float speed = 10f;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float LifeTime = 5f;
+    [SerializeField] private ParticleFX hitFX;
 
     private float lifeTime;
 
@@ -27,11 +29,13 @@ public class Projectile : MonoBehaviour
         {
             ChaserEnemy enemy = other.GetComponent<ChaserEnemy>();
             enemy.TakeDamage(50);
+            Main.Instance.PlayParticle(hitFX, transform.position);
         }
 
-        if (other.CompareTag("Ground"))
+        if (destroyOnHit || other.CompareTag("Ground"))
         {
             Destroy(gameObject);
+            Main.Instance.PlayParticle(hitFX, transform.position);
         }
     }
 }

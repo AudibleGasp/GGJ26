@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,8 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public Rigidbody rb;
     public Animator anim;
-    public Projectile projectilePrefab;
+    public Projectile basicProjectilePrefab;
+    public Projectile penetratingProjectilePrefab;
     public ParticleSystem hitFX;
     public ParticleSystem slapFX;
     public Transform muzzleTransform;
@@ -112,10 +114,18 @@ public class PlayerController : MonoBehaviour
     {
         if (masks.Count <= 0) 
             return;
-        
+
+        var projectileToSpawn = masks[0] switch
+        {
+            MaskType.None => basicProjectilePrefab,
+            MaskType.Basic => basicProjectilePrefab,
+            MaskType.Penetrating => penetratingProjectilePrefab,
+            _ => basicProjectilePrefab
+        };
+
         // TODO Switch for different masks
         
-        var p = Instantiate(projectilePrefab, muzzleTransform.position + muzzleTransform.forward * 2, muzzleTransform.rotation);
+        var p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
         p.Launch();
         
         masks.RemoveAt(0);
