@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections; // <-- YENİ: Coroutine kullanmak için gerekli
 
 public class CameraFollow : MonoBehaviour
 {
+    public static CameraFollow Instance; // <-- YENİ: ScoreManager'dan ulaşmak için Singleton
+
     [Header("Targeting")]
     [SerializeField] private Transform target;
 
@@ -25,11 +28,19 @@ public class CameraFollow : MonoBehaviour
     private float _tiltRoll = 0f;
     private float _bobTimer = 0f;
     
+    private Vector3 _shakeOffset = Vector3.zero; // <-- YENİ: Sarsıntı değerini tutacak değişken
+    
     private PlayerController playerController;
+
+    private void Awake() // <-- YENİ: Singleton ataması
+    {
+        if (Instance == null) Instance = this;
+    }
 
     void Start()
     {
-        playerController = Main.Instance.PlayerController;
+        if (Main.Instance != null)
+            playerController = Main.Instance.PlayerController;
         
         if (target != null)
         {
@@ -51,7 +62,8 @@ public class CameraFollow : MonoBehaviour
         _currentPitch -= mouseY;
         _currentPitch = Mathf.Clamp(_currentPitch, -lookXLimit, lookXLimit);
 
-        float targetYaw = playerController.CurrentYaw;
+        // PlayerController güvenliği
+        float targetYaw = playerController != null ? playerController.CurrentYaw : transform.eulerAngles.y;
         
         // Calculate Roll (Tilt) based on strafing
         float targetRoll = -moveX * tiltAngle;
@@ -59,8 +71,10 @@ public class CameraFollow : MonoBehaviour
         
         transform.rotation = Quaternion.Euler(_currentPitch, targetYaw, _tiltRoll);
 
-        // --- 3. Handle Position (Smoothing + Bob) ---
+        // --- 3. Handle Position (Smoothing + Bob + SHAKE) ---
         
+        if (target == null) return;
+
         Vector3 targetPosition = target.TransformPoint(_posOffset);
 
         // Calculate Head Bobbing when moving
@@ -75,11 +89,43 @@ public class CameraFollow : MonoBehaviour
             _bobTimer = 0; // Reset timer when standing still
         }
 
-        transform.position = Vector3.SmoothDamp(
+        // SmoothDamp ile yumuşatılmış ana pozisyonu hesapla
+        Vector3 smoothedPosition = Vector3.SmoothDamp(
             transform.position,
             targetPosition,
             ref _currentVelocity,
             smoothTime
         );
+
+        // YENİ: Sarsıntıyı (Shake) en son ekle. Bu sayede SmoothDamp sarsıntıyı yutmaz.
+        transform.position = smoothedPosition + _shakeOffset;
+    }
+
+    // --- YENİ EKLENEN FONKSİYONLAR ---
+
+    public void Punch(float duration, float magnitude)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ShakeRoutine(duration, magnitude));
+    }
+
+    private IEnumerator ShakeRoutine(float duration, float magnitude)
+    {
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            // Rastgele X ve Y yönünde titret
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            _shakeOffset = new Vector3(x, y, 0);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Sarsıntı bitince ofseti sıfırla
+        _shakeOffset = Vector3.zero;
     }
 }

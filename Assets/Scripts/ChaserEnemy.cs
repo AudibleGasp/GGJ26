@@ -37,7 +37,7 @@ public class ChaserEnemy : EnemyBase
         if (isDead || target == null) return;
         UpdateStateLogic();
         // Fall check
-        if (transform.position.y < -10) Destroy(gameObject);
+        //if (transform.position.y < -10) Destroy(gameObject);
     }
 
     // Overriding Slap so Chaser enters Recovery when hit

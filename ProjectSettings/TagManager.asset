@@ -20,7 +20,7 @@ TagManager:
   - MaskCollect
   - Projectile
   - EnemyProjectile
-  - 
+  - ScoreText
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ScoreText
+    uniqueID: 1144179787
     locked: 0
   m_RenderingLayers:
   - Default

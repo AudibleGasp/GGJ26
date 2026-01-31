@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
     private float attackEndTime;
     private float hitTimer;
 
+    public bool IsAirborne => !IsGrounded();
+
     private void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
