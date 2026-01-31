@@ -72,6 +72,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
+        Main.Instance.PlayParticle(ParticleFX.EnemyDespawn, transform.position);
         isDead = true;
         DestroyMask();
         Destroy(gameObject);

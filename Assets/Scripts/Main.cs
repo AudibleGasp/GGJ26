@@ -3,7 +3,8 @@ using UnityEngine;
 public enum ParticleFX
 {
     Basic,
-    Penetrating
+    Penetrating,
+    EnemyDespawn
 }
 
 public class Main : MonoBehaviour
@@ -14,6 +15,7 @@ public class Main : MonoBehaviour
     [Header("Particles")]
     public ParticleSystem BasicHitFX;
     public ParticleSystem PenetratingHitFX;
+    public ParticleSystem EnemyDespawnFX;
 
     private void Awake()
     {
@@ -26,6 +28,7 @@ public class Main : MonoBehaviour
         {
             ParticleFX.Basic => BasicHitFX,
             ParticleFX.Penetrating => PenetratingHitFX,
+            ParticleFX.EnemyDespawn => EnemyDespawnFX,
             _ => BasicHitFX
         };
         
