@@ -63,6 +63,7 @@ public abstract class EnemyBase : MonoBehaviour
         mask = MaskType.None;
         if (maskPrefab != null && maskTransform != null)
         {
+            Main.Instance.PlayParticle(ParticleFX.Sparks, maskTransform.position);
             Mask spawnedMask = Instantiate(maskPrefab, maskTransform.position, maskTransform.rotation);
             float side = Random.value > .5f ? 1 : -1;
             spawnedMask.OnSlap((transform.right * side + Vector3.up * .75f) * 8);

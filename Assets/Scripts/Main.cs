@@ -4,7 +4,8 @@ public enum ParticleFX
 {
     Basic,
     Penetrating,
-    EnemyDespawn
+    EnemyDespawn,
+    Sparks
 }
 
 public class Main : MonoBehaviour
@@ -16,6 +17,7 @@ public class Main : MonoBehaviour
     public ParticleSystem BasicHitFX;
     public ParticleSystem PenetratingHitFX;
     public ParticleSystem EnemyDespawnFX;
+    public ParticleSystem Sparks;
 
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class Main : MonoBehaviour
             ParticleFX.Basic => BasicHitFX,
             ParticleFX.Penetrating => PenetratingHitFX,
             ParticleFX.EnemyDespawn => EnemyDespawnFX,
+            ParticleFX.Sparks => Sparks,
             _ => BasicHitFX
         };
         

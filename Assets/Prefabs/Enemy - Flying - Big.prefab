@@ -150,7 +150,7 @@ MonoBehaviour:
   stopDistance: 2
   maneuverPeriod: 7
   offsetRadius: 12
-  heightOffset: 5
+  heightOffset: 3
   projectileToSpawn: {fileID: 2521271394477892408, guid: a04084373a5714076bdc1bfefdae4699, type: 3}
   muzzleTransform: {fileID: 1144892830424528167}
 --- !u!54 &4257540622554362864
