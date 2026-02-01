@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2898562408810685347}
   - component: {fileID: 4313172074554260138}
   - component: {fileID: 2933576912674258214}
+  - component: {fileID: 1105867038328212247}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MonoBehaviour:
   zRandomness: 1
   yRandomMin: -0.5
   yRandomMax: 0.25
+--- !u!114 &1105867038328212247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6612973186780744739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19038d8d498e44c9b279a661b3f7943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulFXManager
+  floatingScorePrefab: {fileID: 4801629132516412112, guid: 96260313107a24b43a7cc6e859b17b87, type: 3}
+  impactPrefab: {fileID: 0}
+  targetUIElement: {fileID: 0}
+  targetOffset: {x: -150, y: -75, z: 0}
+  spawnDistanceY: 150
+  spawnRandomRangeX: 100
+  targetRandomRangeX: 120
+  flyDuration: 0.4
+  scalePunchAmount: 1.3

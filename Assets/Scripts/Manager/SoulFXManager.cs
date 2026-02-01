@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro; 
 using System.Collections;
 
 public class SoulFXManager : MonoBehaviour
@@ -6,20 +7,26 @@ public class SoulFXManager : MonoBehaviour
     public static SoulFXManager Instance;
 
     [Header("Referanslar")]
-    [Tooltip("Uçacak olan ruh/ikon görseli (UI Image Prefab)")]
-    public GameObject soulPrefab; 
-    
-    [Tooltip("Hedefe vardığında çıkacak efekt (UI Particle veya Explosion Prefab)")]
+    public GameObject floatingScorePrefab; 
     public GameObject impactPrefab;
-    
-    [Tooltip("Ruhun gideceği hedef nokta (Skor Text'i)")]
     public RectTransform targetUIElement;
 
-    [Header("Hareket Ayarları")]
-    public float flyDuration = 0.8f; // Ne kadar sürede gitsin?
-    public float scalePunchAmount = 1.2f; // Hedef vurulunca ne kadar büyüsün?
+    [Header("Hedef İnce Ayar")]
+    public Vector3 targetOffset; 
 
-    // Canvas referansı (Koordinat çevrimi için gerekli)
+    [Header("Spawn (Doğuş) Ayarları")]
+    public float spawnDistanceY = 150f; 
+    [Tooltip("Doğarken sağa sola ne kadar dağılsın?")]
+    public float spawnRandomRangeX = 100f; // Artırdım (Geniş dağılım)
+
+    [Header("Impact (Vuruş) Ayarları")]
+    [Tooltip("Hedefe vururken tam ortaya değil, sağa sola ne kadar sapsın?")]
+    public float targetRandomRangeX = 80f; // YENİ: Hedefteki sapma miktarı
+
+    [Header("Hareket Ayarları")]
+    public float flyDuration = 0.5f;     
+    public float scalePunchAmount = 1.3f; 
+
     private Canvas _parentCanvas;
 
     private void Awake()
@@ -27,85 +34,84 @@ public class SoulFXManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        // Canvas'ı otomatik bul (Ebeveynlerde arar) veya manuel ata
-        // Bu scriptin bir Canvas objesinin altında olmadığını varsayarak:
         if (targetUIElement != null)
             _parentCanvas = targetUIElement.GetComponentInParent<Canvas>();
     }
 
-    /// <summary>
-    /// Bu fonksiyonu düşman öldüğünde çağıracaksın.
-    /// </summary>
-    /// <param name="worldPosition">Düşmanın öldüğü 3D pozisyon</param>
-    public void SpawnSoul(Vector3 worldPosition)
+    public void SpawnFloatingScore(int amount)
     {
-        if (soulPrefab == null || targetUIElement == null || _parentCanvas == null) return;
+        if (floatingScorePrefab == null || targetUIElement == null || _parentCanvas == null) return;
 
-        // 1. Prefab'i Canvas içinde oluştur
-        GameObject soulObj = Instantiate(soulPrefab, _parentCanvas.transform);
+        GameObject scoreObj = Instantiate(floatingScorePrefab, targetUIElement.parent);
         
-        // 2. Dünya pozisyonunu Ekran/Canvas pozisyonuna çevir
-        Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPosition);
-        
-        // Eğer Canvas "Screen Space - Overlay" değilse (örn. Camera ise) dönüşüm gerekebilir
-        // Ancak çoğu UI için bu başlangıç yeterlidir.
-        soulObj.transform.position = screenPos;
+        TextMeshProUGUI txt = scoreObj.GetComponent<TextMeshProUGUI>();
+        if (txt == null) txt = scoreObj.GetComponentInChildren<TextMeshProUGUI>();
+        if (txt != null) txt.text = "+" + amount.ToString();
 
-        // 3. Hareketi Başlat
-        StartCoroutine(MoveSoulRoutine(soulObj));
+        // 1. HEDEF SAPMASINI BELİRLE (Rastgele bir X noktası seç)
+        // Her skor objesi, hedefin farklı bir noktasına (sağına, soluna) kilitlenir.
+        float randomTargetX = Random.Range(-targetRandomRangeX, targetRandomRangeX);
+
+        // 2. BAŞLANGIÇ POZİSYONU
+        Vector3 baseTargetPos = GetTargetPosition();
+        
+        Vector3 startPos = baseTargetPos;
+        startPos.y -= spawnDistanceY; 
+        // Aşağıda doğarken de rastgele bir yerde doğsun
+        startPos.x += Random.Range(-spawnRandomRangeX, spawnRandomRangeX); 
+        // Not: startPos.x hesabında baseTargetPos.x'i baz aldık ama üzerine random ekledik.
+
+        scoreObj.transform.position = startPos;
+        scoreObj.transform.localScale = Vector3.one;
+
+        // 3. Hareketi Başlat (Hedef sapmasını da gönderiyoruz)
+        StartCoroutine(MoveScoreRoutine(scoreObj, randomTargetX));
     }
 
-    private IEnumerator MoveSoulRoutine(GameObject soul)
+    private IEnumerator MoveScoreRoutine(GameObject scoreObj, float targetOffsetX)
     {
         float timer = 0f;
-        Vector3 startPos = soul.transform.position;
-        Vector3 endPos = targetUIElement.position;
-
-        // Rastgele bir kavis noktası oluştur (Düz gitmesin, yay çizsin)
-        // Başlangıç ile bitişin ortasında, rastgele sağa/sola sapmış bir nokta
-        Vector3 midPoint = (startPos + endPos) / 2;
-        midPoint += new Vector3(Random.Range(-200f, 200f), Random.Range(-100f, 100f), 0);
-
+        Vector3 startPos = scoreObj.transform.position;
+        
         while (timer < flyDuration)
         {
-            if (soul == null) yield break;
+            if (scoreObj == null) yield break;
 
             timer += Time.deltaTime;
             float t = timer / flyDuration;
-            
-            // Yumuşak hızlanma (Ease In-Out)
-            float easeT = t * t * (3f - 2f * t); 
+            float easeT = t * t; // Exponential Ease-In (Hızlanarak çarpma)
 
-            // Bezier Curve (Kavisli Hareket) Formülü
-            // P = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
-            Vector3 m1 = Vector3.Lerp(startPos, midPoint, easeT);
-            Vector3 m2 = Vector3.Lerp(midPoint, endPos, easeT);
-            soul.transform.position = Vector3.Lerp(m1, m2, easeT);
+            // Hedef pozisyonu her karede güncelle (UI titrerse veya kayarsa diye)
+            // AMA hesapladığımız random 'targetOffsetX' değerini hep koru.
+            Vector3 currentTarget = GetTargetPosition();
+            currentTarget.x += targetOffsetX; // Rastgele seçilen o noktaya git
 
+            scoreObj.transform.position = Vector3.Lerp(startPos, currentTarget, easeT);
             yield return null;
         }
 
-        // 4. Hedefe Vardı
-        if (soul != null) Destroy(soul);
+        // --- Çarpma Anı ---
+        // Patlama efektini tam çarptığı (offsetli) yerde çıkar
+        Vector3 finalHitPos = scoreObj.transform.position;
 
-        // Patlama Efekti Çıkar
+        if (scoreObj != null) Destroy(scoreObj);
+
         if (impactPrefab != null)
         {
-            GameObject impact = Instantiate(impactPrefab, _parentCanvas.transform);
-            impact.transform.position = endPos; // Tam text'in üzerinde patlasın
-            Destroy(impact, 1.5f); // 1.5 saniye sonra temizle
+            GameObject impact = Instantiate(impactPrefab, targetUIElement.parent);
+            impact.transform.position = finalHitPos; 
+            Destroy(impact, 1.0f);
         }
 
-        // Hedef Text'i hafifçe zıplat (ScoreManager'daki punch'tan bağımsız ekstra bir his)
         StartCoroutine(PunchEffect(targetUIElement));
     }
 
     private IEnumerator PunchEffect(RectTransform target)
     {
-        Vector3 originalScale = Vector3.one; // UI genelde 1,1,1'dir
+        Vector3 originalScale = Vector3.one;
         target.localScale = originalScale * scalePunchAmount;
 
-        float duration = 0.15f;
+        float duration = 0.1f;
         float timer = 0f;
 
         while (timer < duration)
@@ -115,5 +121,31 @@ public class SoulFXManager : MonoBehaviour
             yield return null;
         }
         target.localScale = originalScale;
+    }
+
+    private Vector3 GetTargetPosition()
+    {
+        if (targetUIElement == null) return Vector3.zero;
+        return targetUIElement.position + targetOffset;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (targetUIElement != null)
+        {
+            Gizmos.color = Color.green;
+            Vector3 centerPos = targetUIElement.position + targetOffset;
+            
+            // Merkez Nokta
+            Gizmos.DrawWireSphere(centerPos, 10f); 
+            
+            // Vuruş Alanı Genişliği (Hedefin nereye kadar sapabileceğini gösterir)
+            Gizmos.color = Color.yellow;
+            Vector3 leftLimit = centerPos + Vector3.left * targetRandomRangeX;
+            Vector3 rightLimit = centerPos + Vector3.right * targetRandomRangeX;
+            Gizmos.DrawLine(leftLimit, rightLimit);
+            Gizmos.DrawWireSphere(leftLimit, 5f);
+            Gizmos.DrawWireSphere(rightLimit, 5f);
+        }
     }
 }

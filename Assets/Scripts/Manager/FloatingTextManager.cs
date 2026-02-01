@@ -27,8 +27,11 @@ public class FloatingTextManager : MonoBehaviour
         float basePathY = position.y < -5f ? .5f : position.y;
         
         float randX = Random.Range(-xRandomness, xRandomness);
-        float randZ = Random.Range(-zRandomness, zRandomness);
+        float randZ = Random.Range( 0.25f, zRandomness);
         float randY = Random.Range(yRandomMin, yRandomMax);
+
+        randX = position.y < -5f ? 0 : randX;
+        randZ = position.y < -5f ? 0 : randZ;
 
         Vector3 finalSpawnPos = new Vector3(
             position.x + randX, 

@@ -32,7 +32,7 @@ public class ScoreManager : MonoBehaviour
     public float gameTimeInterval = 5f;   
     public float noDamageInterval = 5f;   
 
-    [Header("Camera Shake (Vuruş Hissi)")]
+    [Header("Camera Shake")]
     public float shakeDuration = 0.15f;       // Sarsıntı ne kadar sürsün?
     [Range(0f, 1f)] 
     public float normalShakeIntensity = 0.1f; // Normal vuruş şiddeti
@@ -173,7 +173,7 @@ public class ScoreManager : MonoBehaviour
 
             // 2. ROLLING NUMBERS (Sayıları yuvarla)
             _displayedScore = Mathf.Lerp(startValue, endValue, progress);
-            carnageText.text = $"CARNAGE: {Mathf.FloorToInt(_displayedScore)}";
+            carnageText.text = $"Souls: {Mathf.FloorToInt(_displayedScore)}";
 
             // 3. SCALE DAMPING (Yavaşça küçült)
             if (timer < punchDuration)
@@ -191,7 +191,7 @@ public class ScoreManager : MonoBehaviour
 
         // Son değerleri sabitle
         _displayedScore = endValue;
-        carnageText.text = $"CARNAGE: {Mathf.FloorToInt(_displayedScore)}";
+        carnageText.text = $"Souls: {Mathf.FloorToInt(_displayedScore)}";
         carnageText.transform.localScale = _originalScoreScale;
     }
 
@@ -263,6 +263,13 @@ public class ScoreManager : MonoBehaviour
             }
 
             FloatingTextManager.Instance.ShowText(deathPosition, popupText, textColor);
+        }
+
+        // --- YENİSİ ---
+        if (SoulFXManager.Instance != null)
+        {
+            // deathPosition yerine 'scoreGain' gönderiyoruz (int'e çevirerek)
+            SoulFXManager.Instance.SpawnFloatingScore((int)scoreGain);
         }
 
         // --- CAMERA PUNCH EFFECT ---
