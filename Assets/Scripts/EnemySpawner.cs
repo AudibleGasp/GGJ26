@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
     private float _waveTimer;
     private List<EnemyEntry> _affordableEnemies = new List<EnemyEntry>();
 
-    void Start()
+    public void OnGameStart()
     {
         _currentWaveTargetPower = initialTargetPower;
         if (spawnCenter == null) spawnCenter = this.transform;
@@ -41,6 +41,8 @@ public class EnemySpawner : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null) playerTarget = player.transform;
         }
+
+        enabled = true;
     }
 
     void Update()

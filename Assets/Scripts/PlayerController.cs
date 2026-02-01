@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     private static readonly int Attack = Animator.StringToHash("Attack");
     private static readonly int Mask = Animator.StringToHash("Mask");
     private static readonly int PickUp = Animator.StringToHash("PickUp");
+    private static readonly int Death = Animator.StringToHash("Death");
 
     [Header("Movement")]
     public float movementSpeed = 10f;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public int MaskLimit = 3;
 
     [Header("References")]
+    public CameraFollow cameraFollow;
     public Rigidbody rb;
     public Animator anim;
     public Projectile basicProjectilePrefab;
@@ -65,7 +67,7 @@ public class PlayerController : MonoBehaviour
     private bool wasAirborne;
     public bool IsAirborne => !IsGrounded();
 
-    private void Start()
+    public void OnGameStart()
     {
         if (rb == null) rb = GetComponent<Rigidbody>();
         
@@ -74,6 +76,20 @@ public class PlayerController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        enabled = true;
+        cameraFollow.OnPlayerRespawn();
+
+        cameraFollow.enabled = true;
+    }
+
+    public void KillPlayer()
+    {
+        if(!enabled)
+            return;
+        
+        enabled = false;
+        cameraFollow.OnPlayerDeath();
     }
 
     private void Update()
@@ -110,6 +126,11 @@ public class PlayerController : MonoBehaviour
         wasAirborne = !isGrounded;
         
         hitTimer -= Time.deltaTime;
+
+        if (transform.position.y < -10)
+        {
+            Main.Instance.EndGame(); // The player will be disabled so won't be called twice
+        }
     }
 
     private void FixedUpdate()
@@ -162,8 +183,6 @@ public class PlayerController : MonoBehaviour
                 _ => basicProjectilePrefab
             };
 
-            // TODO Switch for different masks
-            
             if (projectileToSpawn != null)
             {
                 Projectile p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
@@ -276,6 +295,11 @@ public class PlayerController : MonoBehaviour
             
             // anim.SetTrigger("Hit"); 
             // if current lives less than 0 load the try again scene
+        }
+
+        if (currentLives == 0)
+        {
+            Main.Instance.EndGame();
         }
     }
 

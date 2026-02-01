@@ -5,6 +5,10 @@ public class CameraFollow : MonoBehaviour
 {
     public static CameraFollow Instance; // <-- YENİ: ScoreManager'dan ulaşmak için Singleton
 
+    [Header("Animation")]
+    [SerializeField] private Animation anim;
+    [SerializeField] private Rigidbody rb;
+    
     [Header("Targeting")]
     [SerializeField] private Transform target;
 
@@ -27,7 +31,7 @@ public class CameraFollow : MonoBehaviour
     private float _currentPitch = 0f;
     private float _tiltRoll = 0f;
     private float _bobTimer = 0f;
-    
+
     private Vector3 _shakeOffset = Vector3.zero; // <-- YENİ: Sarsıntı değerini tutacak değişken
     
     private PlayerController playerController;
@@ -48,6 +52,17 @@ public class CameraFollow : MonoBehaviour
         }
         
         _currentPitch = transform.localEulerAngles.x;
+    }
+
+    public void OnPlayerDeath()
+    {
+        anim.Play("Death");
+        rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);;
+    }
+
+    public void OnPlayerRespawn()
+    {
+        anim.Play("Reset");
     }
 
     void LateUpdate()
