@@ -100,6 +100,8 @@ public class RangedFlyingEnemy : EnemyBase
         // Use the requested instantiation and launch logic
         Projectile p = Instantiate(projectileToSpawn, muzzleTransform.position + muzzleTransform.forward, muzzleTransform.rotation);
         p.Launch();
+        
+        AudioManager.Instance.PlayOneShotSound("mask-wind", 1f);
     }
 
     // Ensure the flyer reacts to slaps by breaking its flight path

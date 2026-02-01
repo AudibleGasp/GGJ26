@@ -137,6 +137,7 @@ public class EnemySpawner : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(spawnCenter.position - position);
         Instantiate(prefab, position, rotation);
         Main.Instance.PlayParticle(ParticleFX.EnemySpawn, position + Vector3.up);
+        AudioManager.Instance.PlayOneShotSound("spawn");
         EnemyCount++;
     }
 

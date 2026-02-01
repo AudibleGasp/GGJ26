@@ -168,18 +168,28 @@ public class PlayerController : MonoBehaviour
             if (windAbility != null)
             {
                 windAbility.PerformInstantBlast(muzzleTransform);
+                AudioManager.Instance.PlayOneShotSound("mask-wind", 2f);
             }
         }
         // DEĞİLSE -> MERMİ FIRLAT (Orijinal kodun buraya taşındı)
         else
         {
-            var projectileToSpawn = masks[0] switch
+            Projectile projectileToSpawn;
+            switch (masks[0])
             {
-                MaskType.None => basicProjectilePrefab,
-                MaskType.Basic => basicProjectilePrefab,
-                MaskType.Penetrating => penetratingProjectilePrefab,
-                _ => basicProjectilePrefab
-            };
+                case MaskType.None:
+                case MaskType.Basic:
+                    projectileToSpawn = basicProjectilePrefab;
+                    AudioManager.Instance.PlayOneShotSound("mask-pew");
+                    break;
+                case MaskType.Penetrating:
+                    projectileToSpawn = penetratingProjectilePrefab;
+                    AudioManager.Instance.PlayOneShotSound("mask-electro");
+                    break;
+                default:
+                    projectileToSpawn = basicProjectilePrefab;
+                    break;
+            }
 
             if (projectileToSpawn != null)
             {

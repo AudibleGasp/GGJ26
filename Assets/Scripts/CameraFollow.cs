@@ -7,7 +7,6 @@ public class CameraFollow : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] private Animation anim;
-    [SerializeField] private Rigidbody rb;
     
     [Header("Targeting")]
     [SerializeField] private Transform target;
@@ -56,8 +55,13 @@ public class CameraFollow : MonoBehaviour
 
     public void OnPlayerDeath()
     {
-        anim.Play("Death");
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.useGravity = true;
+        rb.isKinematic = false;
         rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);;
+        
+        anim.Play("Death");
     }
 
     public void OnPlayerRespawn()
