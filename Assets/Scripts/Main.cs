@@ -20,9 +20,13 @@ public class Main : MonoBehaviour
     public ParticleSystem EnemyDespawnFX;
     public ParticleSystem Sparks;
 
+    private AudioManager audioManager;
+    
     private void Awake()
     {
         Instance = this;
+        audioManager = new AudioManager();
+
     }
     
     public void PlayParticle(ParticleFX fxType, Vector3 position, int count = 1)

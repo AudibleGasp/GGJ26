@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem jumpLandFX;
     public Transform muzzleTransform;
     public Transform handsTransform;
+    public AudioSource stepSound;
 
     [Header("Health")]
     public int maxLives = 3;
@@ -94,6 +95,7 @@ public class PlayerController : MonoBehaviour
         {
             if (isGrounded)
             {
+                AudioManager.Instance.PlayOneShotSound("jump_end");
                 jumpLandFX.Play();
                 wasAirborne = false;
             }
@@ -232,6 +234,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
+        stepSound.gameObject.SetActive(!wasAirborne && rb.linearVelocity.sqrMagnitude > 15);
+        if(Time.frameCount % 10 == 0)
+            stepSound.pitch = Random.Range(0.96f, 1.04f);
+        
         if(hitTimer > 0) return; // Hit animation is playing (or hit timer is active)
         
         Vector3 targetDirection = (transform.right * inputVector.x) + (transform.forward * inputVector.y);
@@ -253,6 +259,8 @@ public class PlayerController : MonoBehaviour
         Vector3 velocity = rb.linearVelocity;
         rb.linearVelocity = new Vector3(velocity.x, 0, velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        
+        AudioManager.Instance.PlayOneShotSound("jump_start");
     }
 
     private bool IsGrounded()

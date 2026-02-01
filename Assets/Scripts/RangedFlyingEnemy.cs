@@ -62,7 +62,7 @@ public class RangedFlyingEnemy : EnemyBase
     {
         // Generates a random point around the player
         Vector2 randomCircle = Random.insideUnitCircle * offsetRadius;
-        currentTargetOffset = new Vector3(randomCircle.x, heightOffset, randomCircle.y);
+        currentTargetOffset = new Vector3(randomCircle.x, heightOffset + Random.Range(-1f, 3f), randomCircle.y);
     }
 
     private void MoveTowardsOffset()
