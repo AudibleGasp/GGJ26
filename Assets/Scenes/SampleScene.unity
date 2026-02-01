@@ -1212,7 +1212,6 @@ GameObject:
   - component: {fileID: 814558567}
   - component: {fileID: 814558566}
   - component: {fileID: 814558570}
-  - component: {fileID: 814558571}
   - component: {fileID: 814558573}
   - component: {fileID: 814558572}
   m_Layer: 7
@@ -1354,7 +1353,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
   anim: {fileID: 814558573}
-  rb: {fileID: 814558571}
   target: {fileID: 3296590750085863598}
   mouseSensitivity: 2
   lookXLimit: 85
@@ -1363,33 +1361,6 @@ MonoBehaviour:
   tiltSpeed: 10
   bobAmount: 0.04
   bobFrequency: 10
---- !u!54 &814558571
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 814558565}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!135 &814558572
 SphereCollider:
   m_ObjectHideFlags: 0
