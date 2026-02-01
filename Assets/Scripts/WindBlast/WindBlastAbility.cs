@@ -40,11 +40,17 @@ public class WindBlastAbility : MonoBehaviour
 
     public void PerformInstantBlast(Transform performer)
     {
+        // --- YENİ EKLENEN SATIR ---
+        // Kutunun merkezini, boyunun yarısı kadar (z * 0.5) ileri kaydırıyoruz.
+        // Böylece Z boyutu arttıkça kutu geriye değil, ileriye doğru büyür.
+        float centerZ = forwardOffset + (hitboxSize.z * 0.5f);
+
         // 1. MERKEZ NOKTAYI HESAPLA
         // Karakterin Merkezi + Yukarı + İleri
         Vector3 blastCenter = performer.position 
                               + (Vector3.up * heightOffset) 
-                              + (performer.forward * forwardOffset)
+                              + (performer.forward * centerZ)
+                              - (transform.forward * 3f)
                               + (performer.right * leftRightOffset);
 
         // 2. GÖRSELİ OLUŞTUR
@@ -88,18 +94,33 @@ public class WindBlastAbility : MonoBehaviour
         }
     }
 
-    // Editörde Kırmızı Kutuyu Görmek İçin
-    private void OnDrawGizmosSelected()
+    // ARTIK OBJE SEÇİLİ OLMASA BİLE ÇİZER
+    private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1, 0, 0, 0.5f); // Yarı saydam kırmızı
-        
-        // Aynı hesaplamayı burada da yapıyoruz ki editörde görelim
+        // 1. RENGİ BELİRLE
+        // İçini yarı saydam kırmızı yapalım
+        Gizmos.color = new Color(1f, 0f, 0f, 0.3f); 
+
+        float centerZ = forwardOffset + (hitboxSize.z * 0.5f);
+
+        // 2. MERKEZİ HESAPLA (PerformInstantBlast ile birebir aynı olmalı)
+        // DİKKAT: Orijinal kodda 'leftRightOffset' gizmos'ta unutulmuştu, ekledim.
         Vector3 center = transform.position 
                          + (Vector3.up * heightOffset) 
-                         + (transform.forward * forwardOffset);
+                         + (transform.forward * centerZ)
+                         - (transform.forward * 3f)
+                         + (transform.right * leftRightOffset); 
 
-        // Kutuyu karakterin rotasyonuna göre döndürerek çiz
+        // 3. ROTASYONU AYARLA
+        // Kutunun karakterle birlikte dönmesi için Matrix kullanıyoruz
         Gizmos.matrix = Matrix4x4.TRS(center, transform.rotation, Vector3.one);
+
+        // 4. ÇİZİM
+        // İçi dolu kutu (Hacmi görmek için)
+        Gizmos.DrawCube(Vector3.zero, hitboxSize);
+
+        // Kenar çizgileri (Net sınırları görmek için)
+        Gizmos.color = Color.red; // Tam kırmızı
         Gizmos.DrawWireCube(Vector3.zero, hitboxSize);
     }
 }

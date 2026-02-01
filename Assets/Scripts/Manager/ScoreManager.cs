@@ -39,6 +39,16 @@ public class ScoreManager : MonoBehaviour
     [Range(0f, 2f)] 
     public float bigShakeIntensity = 0.4f;    // FATAL / Triple Kill şiddeti
 
+    [Header("Slap Fury (Tokat Kombosu) Ayarları")]
+    public int slapTargetCount = 5;          // Hedef: 5 Tokat
+    public float slapComboDuration = 5.0f;   // Süre: 5 Saniye
+    public float slapComboBonus = 0.5f;      // Ödül: +0.5 Multiplier
+    public Color slapComboColor = Color.yellow; // Renk: Sarı/Altın
+
+    // Slap Takibi için Private Değişkenler
+    private int _currentSlapStreak = 0;
+    private float _lastSlapTime;
+
     // Read-Only Değerler
     public float CurrentScore { get; private set; }
     public float GlobalMultiplier { get; private set; } = 1.0f;
@@ -137,7 +147,7 @@ public class ScoreManager : MonoBehaviour
         if (instant)
         {
             _displayedScore = CurrentScore;
-            carnageText.text = $"CARNAGE: {Mathf.FloorToInt(_displayedScore)}";
+            carnageText.text = $"Souls: {Mathf.FloorToInt(_displayedScore)}";
             return;
         }
 
@@ -249,12 +259,11 @@ public class ScoreManager : MonoBehaviour
             if (bonusMultiplier > 1.5f) // Düşerek öldüyse (FATAL)
             {
                 popupText = "FATAL!\n" + popupText;
+                textColor = multiKillColor;
             }
 
             FloatingTextManager.Instance.ShowText(deathPosition, popupText, textColor);
         }
-
-        // ScoreManager.cs -> AddScore fonksiyonunun en altı:
 
         // --- CAMERA PUNCH EFFECT ---
         if (CameraFollow.Instance != null)
@@ -266,6 +275,46 @@ public class ScoreManager : MonoBehaviour
             float intensity = isBigEvent ? bigShakeIntensity : normalShakeIntensity;
             
             CameraFollow.Instance.Punch(shakeDuration, intensity);
+        }
+    }
+
+    // --- YENİ FONKSİYON: Bunu PlayerCombat scriptinden çağıracaksın ---
+    public void RegisterSlapHit(Vector3 hitPosition)
+    {
+        // 1. Süre Kontrolü: 5 saniye geçtiyse sayacı baştan başlat
+        if (Time.time - _lastSlapTime > slapComboDuration)
+        {
+            _currentSlapStreak = 0;
+        }
+
+        // 2. Sayacı ve zamanı güncelle
+        _currentSlapStreak++;
+        _lastSlapTime = Time.time;
+
+        // 3. Hedefe (5 Tokat) ulaşıldı mı?
+        if (_currentSlapStreak >= slapTargetCount)
+        {
+            TriggerSlapCombo(hitPosition, _currentSlapStreak);
+        }
+    }
+
+    private void TriggerSlapCombo(Vector3 pos, int slapCount=5)
+    {
+        // Ödül Ver
+        GlobalMultiplier += slapComboBonus;
+        UpdateMultiplierUI();
+
+        // Game Feel (Kamera Sarsıntısı)
+        if (CameraFollow.Instance != null)
+        {
+            CameraFollow.Instance.Punch(0.2f, normalShakeIntensity); // Güçlü sarsıntı
+        }
+
+        // Floating Text (Ekranda Yazı Çıksın)
+        if (FloatingTextManager.Instance != null)
+        {
+            string comboText = $"{slapCount}x SLAP FURY!";
+            FloatingTextManager.Instance.ShowText(pos, comboText, slapComboColor);
         }
     }
 }

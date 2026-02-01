@@ -211,6 +211,14 @@ public class PlayerController : MonoBehaviour
                 enemy.Slap((muzzleTransform.forward * 2 + Vector3.up * 1.5f).normalized);
                 hitFX.transform.position = hit.point;
                 hitFX.Play();
+
+                // --- YENİ EKLENEN KISIM: SLAP FURY ---
+                // Vuruşu skor yöneticisine bildiriyoruz
+                if (ScoreManager.Instance != null)
+                {
+                    ScoreManager.Instance.RegisterSlapHit(enemy.transform.position);
+                }
+                // -------------------------------------
             }
         }
 

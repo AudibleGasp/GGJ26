@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 315420459063370176}
   - component: {fileID: 6865538618585010498}
   - component: {fileID: 1753468195108364835}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: FloatingTextPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,9 +82,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1144179787
+  m_SortingLayer: 1
+  m_SortingOrder: 99
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6865538618585010498
@@ -121,10 +121,10 @@ MonoBehaviour:
   m_enableVertexGradient: 1
   m_colorMode: 0
   m_fontColorGradient:
-    topLeft: {r: 1, g: 0, b: 0.19473696, a: 1}
-    topRight: {r: 1, g: 0, b: 0.19473696, a: 1}
-    bottomLeft: {r: 1, g: 0, b: 0.19473696, a: 1}
-    bottomRight: {r: 1, g: 0, b: 0.19473696, a: 1}
+    topLeft: {r: 1, g: 1, b: 0.9411765, a: 1}
+    topRight: {r: 1, g: 1, b: 0.9411765, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 0.9411765, a: 1}
+    bottomRight: {r: 1, g: 1, b: 0.9411765, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0

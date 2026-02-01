@@ -53,15 +53,19 @@ MonoBehaviour:
   punchDuration: 0.4
   multiplierIncrement: 0.1
   airborneBonus: 0.05
-  airborneColor: {r: 0, g: 1, b: 1, a: 1}
+  airborneColor: {r: 0.2747419, g: 0.754814, b: 0.9245283, a: 1}
   multiKillBonus: 0.1
   multiKillDuration: 3
-  multiKillColor: {r: 1, g: 0, b: 1, a: 1}
+  multiKillColor: {r: 0.77254903, g: 0, b: 0.03529412, a: 1}
   gameTimeInterval: 5
   noDamageInterval: 5
   shakeDuration: 0.15
-  normalShakeIntensity: 0.05
-  bigShakeIntensity: 0.12
+  normalShakeIntensity: 0.1
+  bigShakeIntensity: 0.2
+  slapTargetCount: 5
+  slapComboDuration: 5
+  slapComboBonus: 0.5
+  slapComboColor: {r: 0.9622642, g: 0.84705883, b: 0.09803922, a: 1}
 --- !u!114 &2933576912674258214
 MonoBehaviour:
   m_ObjectHideFlags: 0
