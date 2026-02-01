@@ -82,7 +82,7 @@ MonoBehaviour:
   textPrefab: {fileID: 7065311986924411169, guid: dbe159c2747ee47609152b97fc1c546b, type: 3}
   xRandomness: 1
   zRandomness: 1
-  yRandomMin: -0.5
+  yRandomMin: 0
   yRandomMax: 0.25
 --- !u!114 &1105867038328212247
 MonoBehaviour:

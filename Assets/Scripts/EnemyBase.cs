@@ -98,8 +98,19 @@ public abstract class EnemyBase : MonoBehaviour
             // Oyuncu o sırada havada mı?
             bool playerInAir = Main.Instance.PlayerController.IsAirborne;
             
-            // Puanı gönder (Normal Çarpan: 1f)
-            ScoreManager.Instance.AddScore(scoreValue, transform.position, 1f, playerInAir);
+            // --- HESAPLAMA KISMI ---
+            // Varsayılan olarak pozisyonu al, ama Collider varsa tepesini bul
+            Vector3 scorePopupPos = transform.position; 
+            Collider col = GetComponent<Collider>();
+            
+            if (col != null)
+            {
+                // Collider'ın en tepe noktası (Kafa üstü)
+                scorePopupPos = new Vector3(col.bounds.center.x, col.bounds.max.y, col.bounds.center.z);
+            }
+
+            // Hesapladığımız 'scorePopupPos' noktasını gönderiyoruz
+            ScoreManager.Instance.AddScore(scoreValue, scorePopupPos, 1f, playerInAir);
         }
         // -------------------------------------
 
@@ -118,8 +129,17 @@ public abstract class EnemyBase : MonoBehaviour
         {
             bool playerInAir = Main.Instance.PlayerController.IsAirborne;
 
-            // Düşerek ölüm: Bonus Çarpanı 2 (FATAL)
-            ScoreManager.Instance.AddScore(scoreValue, transform.position, 2f, playerInAir);
+            // --- HESAPLAMA KISMI ---
+            Vector3 scorePopupPos = transform.position;
+            Collider col = GetComponent<Collider>();
+
+            if (col != null)
+            {
+                scorePopupPos = new Vector3(col.bounds.center.x, col.bounds.max.y, col.bounds.center.z);
+            }
+
+            // Düşerek ölüm (x2 Bonus)
+            ScoreManager.Instance.AddScore(scoreValue, scorePopupPos, 2f, playerInAir);
         }
         AudioManager.Instance.PlayOneShotSound("kill");
 

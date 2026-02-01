@@ -223,10 +223,17 @@ public class PlayerController : MonoBehaviour
                 hitFX.Play();
 
                 // --- YENİ EKLENEN KISIM: SLAP FURY ---
-                // Vuruşu skor yöneticisine bildiriyoruz
                 if (ScoreManager.Instance != null)
                 {
-                    ScoreManager.Instance.RegisterSlapHit(enemy.transform.position);
+                    // 1. Raycast'in çarptığı collider'ı al
+                    Collider col = hit.collider;
+
+                    // 2. En tepe noktayı hesapla:
+                    // X ve Z için merkezin hizasını al, Y için en tepeyi (max.y) al.
+                    Vector3 topPosition = new Vector3(col.bounds.center.x, col.bounds.max.y, col.bounds.center.z);
+
+                    // 3. ScoreManager'a direkt bu tepe noktayı yolla
+                    ScoreManager.Instance.RegisterSlapHit(topPosition);
                 }
                 // -------------------------------------
             }
