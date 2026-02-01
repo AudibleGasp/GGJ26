@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Security.Principal;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -208,6 +207,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isAttacking && Time.time >= attackEndTime)
         {
+            rb.MovePosition(rb.position + transform.forward * .05f);
+
             AudioManager.Instance.PlayOneShotSound("swing");
 
             nextSide *= -1;
