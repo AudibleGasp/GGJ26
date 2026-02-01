@@ -57,6 +57,8 @@ public abstract class EnemyBase : MonoBehaviour
             return;
         }
         
+        TutorialManager.Instance.TryProgress(TutorialStep.Slap);
+        
         DestroyMask();
     }
 
@@ -81,7 +83,7 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
-protected virtual void Die()
+    protected virtual void Die()
     {
         Main.Instance.PlayParticle(ParticleFX.EnemyDespawn, transform.position);
         isDead = true;
@@ -99,6 +101,7 @@ protected virtual void Die()
 
         DestroyMask();
         Destroy(gameObject);
+        EnemySpawner.Instance.EnemyCount--;
     }
 
     // --- YENİ EKLENEN FONKSİYON ---
@@ -117,6 +120,7 @@ protected virtual void Die()
 
         DestroyMask(); // Maskesi varsa onu da düşür
         Destroy(gameObject);
+        EnemySpawner.Instance.EnemyCount--;
     }
     
 

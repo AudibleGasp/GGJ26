@@ -6,7 +6,8 @@ public enum ParticleFX
     Basic,
     Penetrating,
     EnemyDespawn,
-    Sparks
+    Sparks,
+    EnemySpawn
 }
 
 public class Main : MonoBehaviour
@@ -20,6 +21,7 @@ public class Main : MonoBehaviour
     public ParticleSystem PenetratingHitFX;
     public ParticleSystem EnemyDespawnFX;
     public ParticleSystem Sparks;
+    public ParticleSystem EnemySpawn;
 
     private AudioManager audioManager;
     private Tween timeTween;
@@ -69,6 +71,8 @@ public class Main : MonoBehaviour
             ParticleFX.Penetrating => PenetratingHitFX,
             ParticleFX.EnemyDespawn => EnemyDespawnFX,
             ParticleFX.Sparks => Sparks,
+            ParticleFX.EnemySpawn => EnemySpawn,
+            
             _ => BasicHitFX
         };
         

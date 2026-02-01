@@ -248,6 +248,8 @@ public class PlayerController : MonoBehaviour
 
     private void PerformMaskAction()
     {
+        TutorialManager.Instance.TryProgress(TutorialStep.UsePower);
+        
         anim.SetTrigger(Mask);
         UseNextMask();
     }

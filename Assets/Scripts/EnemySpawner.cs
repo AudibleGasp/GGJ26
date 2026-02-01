@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [System.Serializable]
 public class EnemyEntry
@@ -11,6 +13,10 @@ public class EnemyEntry
 
 public class EnemySpawner : MonoBehaviour
 {
+    public static EnemySpawner Instance;
+
+    public int EnemyCount;
+    
     [Header("Spawn Settings")]
     [SerializeField] private List<EnemyEntry> enemyPool;
     [SerializeField] private Transform spawnCenter;
@@ -30,6 +36,11 @@ public class EnemySpawner : MonoBehaviour
     private float _waveTimer;
     private List<EnemyEntry> _affordableEnemies = new List<EnemyEntry>();
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public void OnGameStart()
     {
         _currentWaveTargetPower = initialTargetPower;
@@ -43,6 +54,8 @@ public class EnemySpawner : MonoBehaviour
         }
 
         enabled = true;
+
+        _waveTimer = 1f;
     }
 
     void Update()
@@ -123,6 +136,8 @@ public class EnemySpawner : MonoBehaviour
         // Face the player for immediate engagement, or face center
         Quaternion rotation = Quaternion.LookRotation(spawnCenter.position - position);
         Instantiate(prefab, position, rotation);
+        Main.Instance.PlayParticle(ParticleFX.EnemySpawn, position + Vector3.up);
+        EnemyCount++;
     }
 
     private void OnDrawGizmosSelected()

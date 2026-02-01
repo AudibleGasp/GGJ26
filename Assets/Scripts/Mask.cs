@@ -51,6 +51,8 @@ public class Mask : MonoBehaviour
         PlayerController player = Main.Instance.PlayerController;
         if(player.TryPickUpMask(Type))
         {
+            TutorialManager.Instance.TryProgress(TutorialStep.PickUp);
+            
             Main.Instance.PlayParticle(ParticleFX.Sparks, transform.position, 2);
             Destroy(gameObject);
         }
