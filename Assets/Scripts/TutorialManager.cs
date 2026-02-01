@@ -71,6 +71,9 @@ public class TutorialManager : MonoBehaviour
         }
         
         if(currentStep != TutorialStep.End)
+        {
+            AudioManager.Instance.PlayOneShotSound("spawn");
             transform.rotation = Quaternion.AngleAxis(Camera.main.transform.rotation.eulerAngles.y, Vector3.up);
+        }    
     }
 }

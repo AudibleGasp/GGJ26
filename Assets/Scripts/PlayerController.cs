@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Principal;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -202,13 +203,15 @@ public class PlayerController : MonoBehaviour
         masks.RemoveAt(0);
     }
 
+    private int nextSide = 1;
     private void HandleAttack()
     {
         if (isAttacking && Time.time >= attackEndTime)
         {
             AudioManager.Instance.PlayOneShotSound("swing");
-            
-            handsTransform.localScale = new Vector3(Random.value > .5f ? 1 : -1, 1, 1);
+
+            nextSide *= -1;
+            handsTransform.localScale = new Vector3(nextSide, 1, 1);
             Debug.DrawLine(transform.position, transform.position + muzzleTransform.forward * attackRange, Color.red, 1f);
 
             slapFX.Play();
@@ -325,6 +328,7 @@ public class PlayerController : MonoBehaviour
         if (currentLives > 0)
         {
             AudioManager.Instance.PlayOneShotSound("hit");
+            AudioManager.Instance.PlayOneShotSound("punch");
             currentLives--;
             
             // anim.SetTrigger("Hit"); 
