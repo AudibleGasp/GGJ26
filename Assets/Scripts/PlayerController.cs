@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     private static readonly int Attack = Animator.StringToHash("Attack");
     private static readonly int Mask = Animator.StringToHash("Mask");
     private static readonly int PickUp = Animator.StringToHash("PickUp");
-    private static readonly int Death = Animator.StringToHash("Death");
 
     [Header("Movement")]
     public float movementSpeed = 10f;
@@ -42,7 +41,6 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem jumpLandFX;
     public Transform muzzleTransform;
     public Transform handsTransform;
-    public AudioSource stepSound;
 
     [Header("Health")]
     public int maxLives = 3;
@@ -198,6 +196,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isAttacking && Time.time >= attackEndTime)
         {
+            AudioManager.Instance.PlayOneShotSound("swing");
+            
             handsTransform.localScale = new Vector3(Random.value > .5f ? 1 : -1, 1, 1);
             Debug.DrawLine(transform.position, transform.position + muzzleTransform.forward * attackRange, Color.red, 1f);
 
@@ -261,11 +261,17 @@ public class PlayerController : MonoBehaviour
         CurrentYaw += mouseX;
     }
 
+    private float lastPlayedStepTime;
     private void HandleMovement()
     {
-        stepSound.gameObject.SetActive(!wasAirborne && rb.linearVelocity.sqrMagnitude > 15);
-        if(Time.frameCount % 10 == 0)
-            stepSound.pitch = Random.Range(0.96f, 1.04f);
+        if(!wasAirborne && rb.linearVelocity.sqrMagnitude > 10)
+        {
+            if (Time.time > lastPlayedStepTime + .25f)
+            {
+                lastPlayedStepTime = Time.time;
+                AudioManager.Instance.PlayOneShotSound("step");
+            }
+        }
         
         if(hitTimer > 0) return; // Hit animation is playing (or hit timer is active)
         
@@ -301,6 +307,7 @@ public class PlayerController : MonoBehaviour
     {
         if (currentLives > 0)
         {
+            AudioManager.Instance.PlayOneShotSound("hit");
             currentLives--;
             
             // anim.SetTrigger("Hit"); 

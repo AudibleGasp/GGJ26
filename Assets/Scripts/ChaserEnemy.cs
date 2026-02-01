@@ -162,6 +162,7 @@ public class ChaserEnemy : EnemyBase
             case EnemyState.Lunge:
                 // Add a small upward hop at the start of the lunge
                 rb.linearVelocity += Vector3.up * 5f;
+                AudioManager.Instance.PlayOneShotSound("whoosh");
                 break;
 
             case EnemyState.Recovering:

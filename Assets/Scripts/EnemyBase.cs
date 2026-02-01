@@ -32,7 +32,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Update()
     {
         // Eğer haritadan aşağı düştüyse (FATAL DEATH)
-        if (!isDead && transform.position.y < -15f)
+        if (!isDead && transform.position.y < -8f)
         {
             HandleFallDeath();
         }
@@ -54,12 +54,14 @@ public abstract class EnemyBase : MonoBehaviour
         if (mask == MaskType.None)
         {
             HandlePostMaskSlap(direction);
+            AudioManager.Instance.PlayOneShotSound("slap");
             return;
         }
         
         TutorialManager.Instance.TryProgress(TutorialStep.Slap);
         
         DestroyMask();
+        AudioManager.Instance.PlayOneShotSound("punch");
     }
 
     protected virtual void HandlePostMaskSlap(Vector3 direction)
@@ -85,6 +87,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
+        AudioManager.Instance.PlayOneShotSound("kill");
+        
         Main.Instance.PlayParticle(ParticleFX.EnemyDespawn, transform.position);
         isDead = true;
 
@@ -117,6 +121,7 @@ public abstract class EnemyBase : MonoBehaviour
             // Düşerek ölüm: Bonus Çarpanı 2 (FATAL)
             ScoreManager.Instance.AddScore(scoreValue, transform.position, 2f, playerInAir);
         }
+        AudioManager.Instance.PlayOneShotSound("kill");
 
         DestroyMask(); // Maskesi varsa onu da düşür
         Destroy(gameObject);

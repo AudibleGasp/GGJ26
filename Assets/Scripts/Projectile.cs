@@ -35,6 +35,7 @@ public class Projectile : MonoBehaviour
                 EnemyBase enemy = other.GetComponent<EnemyBase>();
                 enemy.TakeDamage(damage);
                 Main.Instance.PlayParticle(hitFX, transform.position);
+                AudioManager.Instance.PlayOneShotSound("playerHit");
             }
         }
         else
@@ -45,6 +46,7 @@ public class Projectile : MonoBehaviour
                 PushTarget(other);
                 player.OnHit();
                 Main.Instance.PlayParticle(hitFX, transform.position);
+                AudioManager.Instance.PlayOneShotSound("hit");
             }
         }
 

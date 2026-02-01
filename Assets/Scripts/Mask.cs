@@ -53,6 +53,8 @@ public class Mask : MonoBehaviour
         {
             TutorialManager.Instance.TryProgress(TutorialStep.PickUp);
             
+            AudioManager.Instance.PlayOneShotSound("pickup");
+            
             Main.Instance.PlayParticle(ParticleFX.Sparks, transform.position, 2);
             Destroy(gameObject);
         }
